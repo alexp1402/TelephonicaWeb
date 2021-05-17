@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Telephonica</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<!--    <link rel="stylesheet" type="text/css" media="all"
+          href="../../css/gtvg.css" th:href="@{/css/gtvg.css}" />
+-->
+
+</head>
+<body>
+<!-- регист имеет значение!-->
+<!-- включаем заголовок-->
+<!--
+<div th:replace="~{fragments/navbar/HeadBar::HeadNav}"></div>
+
+
+<div class="center-screen">
+-->
+    <!-- включаем тело-->
+<!--    <div th:replace="~{fragments/form/SendNameFormCss :: sendFormFromCss}"></div>
+</div>
+-->
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<!--<input type="text" name="userName" value="anonymous" th:value="${user}" />-->
+<div style = "align:right">
+    <a th:href="@{'?locale=ru'}">рус</a>
+    <a th:href="@{'?locale=en'}">англ</a>
+</div>
+
+
+
+<p>
+    Today is: <span th:text="${date}">13 May 2011</span>
+</p>
+<p th:text="#{title}">Welcome to our grocery store!</p>
+
+<a th:href="@{/admin}">Admin</a>
+<br>
+<a th:href="@{/user}">User</a>
+
+
+<p>Please select an option</p>
+<ol>
+    <li><a href="product/list.html" th:href="@{/product/list}">Product List</a></li>
+    <li><a href="order/list.html" th:href="@{/order/list}">Order List</a></li>
+    <li><a href="subscribe.html" th:href="@{/subscribe}">Subscribe to our Newsletter</a></li>
+    <li><a href="userprofile.html" th:href="@{/userprofile}">See User Profile</a></li>
+</ol>
+
+<form action="subscribe.html" th:attr="action=@{/subscribe}">
+    <fieldset>
+        <input type="text" name="email" />
+        <input type="submit" value="Subscribe!" th:attr="value=#{subscribe}"/>
+    </fieldset>
+</form>
+
+<input type="checkbox" name="option2" th:checked="${active}" /> <!-- HTML -->
+<input type="checkbox" name="option1" checked="checked" /> <!-- XHTML -->
+
+<table>
+    <tr data-th-each="user : ${users}">
+        <td data-th-text="${user.login}">...</td>
+        <td data-th-text="${user.name}">...</td>
+    </tr>
+</table>
+
+
+<h1>Product list</h1>
+<table>
+    <tr>
+        <th>NAME</th>
+        <th>PRICE</th>
+        <th>IN STOCK</th>
+    </tr>
+    <tr th:each="prod : ${prods}">
+        <td th:text="${prod.name}">Onions</td>
+        <td th:text="${prod.price}">2.41</td>
+        <td th:text="${prod.inStock}? #{true} : #{false}">yes</td>
+    </tr>
+</table>
+<p>
+    <a href="../home.html" th:href="@{/}">Return to home</a>
+</p>
+</body>
+</html>
