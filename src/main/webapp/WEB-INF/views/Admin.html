@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title th:text="#{admin.title}">Admin page</title>
+</head>
+<body>
+<br>
+
+<br>
+<a th:href="@{admin/addTelephoneService}" th:text="#{admin.add.service}">Add service</a>
+<br>
+<a th:href="@{admin/viewTelephoneService}" th:text="#{admin.view.service}">View service</a>
+<br>
+<a th:href="@{addUser}">Add user</a>
+<br>
+<a th:href="@{viewUser}">View User</a>
+
+
+</body>
+</html>

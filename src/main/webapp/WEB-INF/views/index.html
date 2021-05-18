@@ -21,7 +21,7 @@
 <!--    <div th:replace="~{fragments/form/SendNameFormCss :: sendFormFromCss}"></div>
 </div>
 -->
-<!-- Optional JavaScript -->
+<!-- Optional JavaScript action="#" -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
 <!--<input type="text" name="userName" value="anonymous" th:value="${user}" />-->
 <div style = "align:right">
@@ -30,7 +30,11 @@
 </div>
 
 
+<a th:href="@{/admin}">Admin</a>
+<br>
+<a th:href="@{/user}">User</a>
 
+<!--
 <p>
     Today is: <span th:text="${date}">13 May 2011</span>
 </p>
@@ -56,8 +60,8 @@
     </fieldset>
 </form>
 
-<input type="checkbox" name="option2" th:checked="${active}" /> <!-- HTML -->
-<input type="checkbox" name="option1" checked="checked" /> <!-- XHTML -->
+<input type="checkbox" name="option2" th:checked="${active}" />
+<input type="checkbox" name="option1" checked="checked" />
 
 <table>
     <tr data-th-each="user : ${users}">
@@ -83,5 +87,6 @@
 <p>
     <a href="../home.html" th:href="@{/}">Return to home</a>
 </p>
+-->
 </body>
 </html>
