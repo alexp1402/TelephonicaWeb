@@ -5,25 +5,25 @@
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <body>
-TEST<br>
-
 <form th:action="@{/admin/addTelephoneService}" method="POST" th:object="${service}">
     <div>
         <label for="serviceName" th:text="#{service.name}">Telephone service name</label>
-        <input name="serviceName" type="text" id="serviceName" th:placeholder="#{service.name.placeholder}"
-               th:readonly="${readonly}" th:field="*{name}">
+        <input type="text" id="serviceName" th:placeholder="#{service.name.placeholder}"
+               th:field="*{name}">
+        <div style="color:red" th:if="${#fields.hasErrors('name')}" th:text="#{service.name.error}">Name Error</div>
     </div>
 
     <div>
         <label for="description" th:text="#{service.description}">Service description</label>
-        <textarea name="description" id="description" th:placeholder="#{service.description.placeholder}"
-                  th:readonly="${readonly}" th:field="*{description}"></textarea>
+        <textarea id="description" th:placeholder="#{service.description.placeholder}"
+                  th:field="*{description}" cols="80" rows="10" wrap="hard"></textarea>
+        <div style="color:red" th:if="${#fields.hasErrors('description')}" th:text="#{service.description.error}">Name Error</div>
     </div>
 
     <div>
         <label for="cost" th:text="#{service.cost}">Cost</label>
-        <input name="cost" type="text" id="cost" th:placeholder="#{service.cost.placeholder}" th:readonly="${readonly}"
-               th:field="*{cost}">
+        <input type="text" id="cost" th:placeholder="#{service.cost.placeholder}" value="0" th:field="*{cost}">
+        <div style="color:red" th:if="${#fields.hasErrors('cost')}" th:text="#{service.cost.error}">Name Error</div>
     </div>
 
 
@@ -35,7 +35,7 @@ TEST<br>
 <!--        </select>-->
 <!--    </div>-->
 
-    <button type="submit" th:text="#{button.send}">Send</button>
+    <button type="submit" th:text="#{button.add}">Add</button>
 </form>
 <!--
 <form th:action="@{admin/addTelephoneService}" class="w3-container w3-card-4 w3-light-grey w3-text-blue w3-margin" method="POST" th:object="${}">

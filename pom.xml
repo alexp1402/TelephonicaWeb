@@ -101,8 +101,9 @@
         <dependency>
             <groupId>org.hibernate.validator</groupId>
             <artifactId>hibernate-validator</artifactId>
-            <version>7.0.1.Final</version>
+            <version>6.1.6.Final</version>
         </dependency>
+
 
 
         <!-- https://mvnrepository.com/artifact/org.thymeleaf/thymeleaf-spring5 -->
@@ -117,6 +118,15 @@
             <artifactId>jstl</artifactId>
             <version>1.2</version>
         </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.postgresql/postgresql -->
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>42.2.20</version>
+        </dependency>
+
+
 
     </dependencies>
 

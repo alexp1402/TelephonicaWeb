@@ -1,12 +1,14 @@
 package org.callservice.controller;
 
-import jakarta.validation.Valid;
-import org.callservice.entity.ServiceBillingType;
-import org.callservice.model.TelephoneServiceForm;
+
+import org.callservice.model.TelephoneService;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+
+import javax.validation.Valid;
 
 @Controller
 public class AdminController {
@@ -16,24 +18,25 @@ public class AdminController {
         return "Admin";
     }
 
+
     @GetMapping("/admin/addTelephoneService")
-//    @ModelAttribute
-    public String addNewTelephoneService(Model model){
-        model.addAttribute("service",new TelephoneServiceForm());
-        model.addAttribute("action", "/admin/addTelephoneService");
-        model.addAttribute("readonly",false);
-        model.addAttribute("billingEnum", ServiceBillingType.values());
+    public String addNewTelephoneService(@ModelAttribute("service") TelephoneService tService){
+//        model.addAttribute("service",new TelephoneServiceForm());
+//        model.addAttribute("action", "/admin/addTelephoneService");
+//        model.addAttribute("readonly",false);
+//        model.addAttribute("billingEnum", ServiceBillingType.values());
         return "AddService";
     }
 
+    //adding new Telephone Service controller
     @PostMapping("/admin/addTelephoneService")
-    public String addTelephoneService(@ModelAttribute("service") @Valid TelephoneServiceForm tService, BindingResult bindingResult){
+    public String addTelephoneService(@ModelAttribute("service") @Valid TelephoneService tService, BindingResult bindingResult){
+
         if(bindingResult.hasErrors()){
             return "AddService";
         }
-        //TelephoneServiceForm ts =(TelephoneServiceForm) model.getAttribute("service");
 
-        System.out.println(tService.getName());
+
         //call repo to write service in DB
 
         return "redirect:/admin";
