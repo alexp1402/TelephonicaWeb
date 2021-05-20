@@ -1,6 +1,6 @@
 package org.callservice.configuration;
 
-import org.postgresql.ds.PGPoolingDataSource;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
@@ -13,43 +13,41 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 import java.util.Properties;
 
 @Configuration
-@EnableJpaRepositories(basePackages = {
-        "org.callservice.repository"
-})
+@EnableJpaRepositories(basePackages = "org.callservice.repository")
 @EnableTransactionManagement
-@EnableSpringDataWebSupport
-@PropertySource("classpath:application")
+//@EnableSpringDataWebSupport
+@PropertySource("classpath:application.properties")
 public class PersistenceConfig {
-//https://github.com/pkainulainen/spring-data-jpa-examples/blob/master/query-methods/src/main/java/net/petrikainulainen/springdata/jpa/config/PersistenceContext.java
-//    private static final String PROPERTY_NAME_DB_DRIVER_CLASS = "db.driver";
-//    private static final String PROPERTY_NAME_DB_PASSWORD = "db.password";
-//    private static final String PROPERTY_NAME_DB_URL = "db.url";
-//    private static final String PROPERTY_NAME_DB_USER = "db.username";
-//    private static final String PROPERTY_NAME_HIBERNATE_DIALECT = "hibernate.dialect";
-//    private static final String PROPERTY_NAME_HIBERNATE_FORMAT_SQL = "hibernate.format_sql";
-//    private static final String PROPERTY_NAME_HIBERNATE_HBM2DDL_AUTO = "hibernate.hbm2ddl.auto";
-//    private static final String PROPERTY_NAME_HIBERNATE_NAMING_STRATEGY = "hibernate.ejb.naming_strategy";
-//    private static final String PROPERTY_NAME_HIBERNATE_SHOW_SQL = "hibernate.show_sql";
 
+    @Autowired
+    private Environment env;
 
+//    public PersistenceConfig() {
+//        super();
+//    }
 
+    /**
+     * Creates the bean DataSource
+     *
+     * @param env The runtime environment of  our application.
+     * @return
+     */
 
     @Bean(destroyMethod = "close")
     DataSource dataSource(Environment env) {
 
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
 
-        dataSource.setDriverClassName("org.postgresql.Driver");
-        dataSource.setUrl("jdbc:postgresql://localhost:5432/telephonica");
-        dataSource.setUsername("root");
-        dataSource.setPassword("123");
-
+        dataSource.setDriverClassName(env.getProperty("spring.datasource.driver"));
+        dataSource.setUrl(env.getProperty("spring.datasource.url"));
+        dataSource.setUsername(env.getProperty("spring.datasource.username"));
+        dataSource.setPassword(env.getProperty("spring.datasource.password"));
         return dataSource;
-
     }
 
 
@@ -62,38 +60,14 @@ public class PersistenceConfig {
      */
     @Bean
     LocalContainerEntityManagerFactoryBean entityManagerFactory(DataSource dataSource, Environment env) {
-        LocalContainerEntityManagerFactoryBean entityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
+        final LocalContainerEntityManagerFactoryBean entityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
         entityManagerFactoryBean.setDataSource(dataSource);
-        //entityManagerFactoryBean.setPersistenceUnitName(jpaData);
+        //package with Entity
+        entityManagerFactoryBean.setPackagesToScan(new String[]{"org.callservice.entity"});
+        //hibernate implementation of JpaVendorAdapter
         entityManagerFactoryBean.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
-        //
-        entityManagerFactoryBean.setPackagesToScan("classpath:entity");
-
-
-        Properties jpaProperties = new Properties();
-        entityManagerFactoryBean.setJpaProperties(jpaProperties);
-//
-//        //Configures the used database dialect. This allows Hibernate to create SQL
-//        //that is optimized for the used database.
-//        jpaProperties.put(PROPERTY_NAME_HIBERNATE_DIALECT, env.getRequiredProperty(PROPERTY_NAME_HIBERNATE_DIALECT));
-//
-//        //Specifies the action that is invoked to the database when the Hibernate
-//        //SessionFactory is created or closed.
-//        jpaProperties.put(PROPERTY_NAME_HIBERNATE_HBM2DDL_AUTO, env.getRequiredProperty(PROPERTY_NAME_HIBERNATE_HBM2DDL_AUTO));
-//
-//        //Configures the naming strategy that is used when Hibernate creates
-//        //new database objects and schema elements
-//        jpaProperties.put(PROPERTY_NAME_HIBERNATE_NAMING_STRATEGY, env.getRequiredProperty(PROPERTY_NAME_HIBERNATE_NAMING_STRATEGY));
-//
-//        //If the value of this property is true, Hibernate writes all SQL
-//        //statements to the console.
-//        jpaProperties.put(PROPERTY_NAME_HIBERNATE_SHOW_SQL, env.getRequiredProperty(PROPERTY_NAME_HIBERNATE_SHOW_SQL));
-//
-//        //If the value of this property is true, Hibernate will use prettyprint
-//        //when it writes SQL to the console.
-//        jpaProperties.put(PROPERTY_NAME_HIBERNATE_FORMAT_SQL, env.getRequiredProperty(PROPERTY_NAME_HIBERNATE_FORMAT_SQL));
-//
-//        entityManagerFactoryBean.setJpaProperties(jpaProperties);
+        //add Hibernate Properties
+        entityManagerFactoryBean.setJpaProperties(additionalProperties());
 
         return entityManagerFactoryBean;
     }
@@ -102,13 +76,38 @@ public class PersistenceConfig {
      * Creates the transaction manager bean that integrates the used JPA provider with the
      * Spring transaction mechanism.
      *
-     * @param entityManagerFactory The used JPA entity manager factory.
+     * @param emf The used JPA entity manager factory.
      * @return
      */
     @Bean
-    JpaTransactionManager transactionManager(EntityManagerFactory entityManagerFactory) {
+    JpaTransactionManager transactionManager(final EntityManagerFactory emf) {
         JpaTransactionManager transactionManager = new JpaTransactionManager();
-        transactionManager.setEntityManagerFactory(entityManagerFactory);
+        transactionManager.setEntityManagerFactory(emf);
         return transactionManager;
+    }
+
+    /**
+     * Creates the properties for Hibernate from application.properties file in resources folder
+     */
+
+    final Properties additionalProperties() {
+        final Properties hibernateProperties = new Properties();
+        //Specifies the action that is invoked to the database when the Hibernate SessionFactory is created or closed.
+        hibernateProperties.setProperty("hibernate.hbm2ddl.auto", env.getProperty("hibernate.hbm2ddl.auto"));
+        //Configures the used database dialect. This allows Hibernate to create SQL
+        hibernateProperties.setProperty("hibernate.dialect", env.getProperty("hibernate.dialect"));
+        //Configures the naming strategy that is used when Hibernate creates new database objects and schema elements
+        hibernateProperties.setProperty("hibernate.ejb.naming_strategy", env.getProperty("hibernate.ejb.naming_strategy"));
+        //Write sql in console
+        hibernateProperties.setProperty("hibernate.show_sql", env.getProperty("hibernate.show_sql"));
+        //Format sql for console (pretty)
+        hibernateProperties.setProperty("hibernate.format_sql", env.getProperty("hibernate.format_sql"));
+
+//
+//        hibernateProperties.setProperty("hibernate.cache.use_second_level_cache", env.getProperty("hibernate.cache.use_second_level_cache"));
+//        hibernateProperties.setProperty("hibernate.cache.use_query_cache", env.getProperty("hibernate.cache.use_query_cache"));
+
+        // hibernateProperties.setProperty("hibernate.globally_quoted_identifiers", "true");
+        return hibernateProperties;
     }
 }

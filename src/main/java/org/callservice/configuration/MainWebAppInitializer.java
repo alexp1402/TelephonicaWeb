@@ -7,6 +7,7 @@ public class MainWebAppInitializer extends AbstractAnnotationConfigDispatcherSer
 
     @Override
     protected Class<?>[] getRootConfigClasses() {
+//        return new Class[] {PersistenceConfig.class};
         return null;
     }
 
