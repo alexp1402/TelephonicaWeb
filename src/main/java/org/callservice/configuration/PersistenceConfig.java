@@ -20,16 +20,16 @@ import java.util.Properties;
 @Configuration
 @EnableJpaRepositories(basePackages = "org.callservice.repository")
 @EnableTransactionManagement
-//@EnableSpringDataWebSupport
+@EnableSpringDataWebSupport
 @PropertySource("classpath:application.properties")
 public class PersistenceConfig {
 
     @Autowired
     private Environment env;
 
-//    public PersistenceConfig() {
-//        super();
-//    }
+    public PersistenceConfig() {
+        super();
+    }
 
     /**
      * Creates the bean DataSource
@@ -38,7 +38,7 @@ public class PersistenceConfig {
      * @return
      */
 
-    @Bean(destroyMethod = "close")
+    @Bean
     DataSource dataSource(Environment env) {
 
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
