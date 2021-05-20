@@ -1,0 +1,13 @@
+CREATE DATABASE telephonica
+    WITH
+    OWNER = root
+    ENCODING = 'UTF8'
+    CONNECTION LIMIT = -1;
+
+    drop table if exists TEST cascade
+
+    create table TEST (
+       id int8 not null,
+        test varchar(255),
+        primary key (id)
+    )

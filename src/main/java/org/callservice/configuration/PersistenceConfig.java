@@ -20,7 +20,7 @@ import java.util.Properties;
 @Configuration
 @EnableJpaRepositories(basePackages = "org.callservice.repository")
 @EnableTransactionManagement
-@EnableSpringDataWebSupport
+//@EnableSpringDataWebSupport
 @PropertySource("classpath:application.properties")
 public class PersistenceConfig {
 
