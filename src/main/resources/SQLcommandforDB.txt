@@ -14,3 +14,16 @@ CREATE DATABASE telephonica
         name varchar(255),
         primary key (id)
     )
+
+    Hibernate:
+        select
+            nextval ('hibernate_sequence')
+    Hibernate:
+        insert
+        into
+            t_services
+            (cost, description, name, id)
+        values
+            (?, ?, ?, ?)
+
+

@@ -2,10 +2,10 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Telephonica</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<!--    <link rel="stylesheet" type="text/css" media="all"
-          href="../../css/gtvg.css" th:href="@{/css/gtvg.css}" />
--->
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <!--    <link rel="stylesheet" type="text/css" media="all"
+              href="../../css/gtvg.css" th:href="@{/css/gtvg.css}" />
+    -->
 
 </head>
 <body>
@@ -17,14 +17,14 @@
 
 <div class="center-screen">
 -->
-    <!-- включаем тело-->
+<!-- включаем тело-->
 <!--    <div th:replace="~{fragments/form/SendNameFormCss :: sendFormFromCss}"></div>
 </div>
 -->
 <!-- Optional JavaScript action="#" -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
 <!--<input type="text" name="userName" value="anonymous" th:value="${user}" />-->
-<div style = "align:right">
+<div style="align:right">
     <a th:href="@{'?locale=ru'}">рус</a>
     <a th:href="@{'?locale=en'}">англ</a>
 </div>
@@ -33,6 +33,18 @@
 <a th:href="@{/admin}">Admin</a>
 <br>
 <a th:href="@{/user}">User</a>
+
+
+<br>
+<br>
+<br>
+<br>
+
+<div>
+    <a th:href="@{/login}">Login</a>
+    <br>
+    <a th:href="@{/logout}">Logout</a>
+</div>
 
 <!--
 <p>

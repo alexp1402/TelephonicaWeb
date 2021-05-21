@@ -1,25 +1,30 @@
 package org.callservice.controller;
 
 
+import org.callservice.models.Client;
 import org.callservice.models.TelephoneService;
 import org.callservice.repositories.TelephoneServiceRepo;
+import org.callservice.utils.EmailValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.Optional;
+import java.util.*;
 
 @Controller
 public class AdminController {
 
     private TelephoneServiceRepo telephoneService;
+    private EmailValidator emailValidator;
 
     @Autowired
-    public AdminController(TelephoneServiceRepo telephoneService) {
+    public AdminController(TelephoneServiceRepo telephoneService, EmailValidator emailValidator) {
         this.telephoneService = telephoneService;
+        this.emailValidator=emailValidator;
     }
 
     //main admin page
@@ -54,8 +59,6 @@ public class AdminController {
     //call edit service page with service object
     @GetMapping("admin/editService/{id}")
     public String editService(@PathVariable("id")Long id, Model model){
-//        Optional<TelephoneService> tService = telephoneService.findById(id);
-//        tService.
         model.addAttribute("service",telephoneService.findById(id).get());
         return "EditService";
     }
@@ -65,45 +68,63 @@ public class AdminController {
     public String patchService(@PathVariable("id")Long id, @ModelAttribute("service") TelephoneService service, BindingResult bindingResult){
         if(bindingResult.hasErrors())
             return "EditService";
-        //if we call save with existing id it's like update method
         telephoneService.save(service);
         return "redirect:/admin/viewTelephoneService";
     }
 
-//    @PutMapping("admin/patchTelephoneService/{id}")
-//    public String putService(@PathVariable("id")Long id, @ModelAttribute("service") TelephoneService service, BindingResult bindingResult){
-//        if(bindingResult.hasErrors())
-//            return "EditService";
-//
-//        System.out.println("NEW NAME - "+service.getName());
-//        //store service information by id
-//        return "redirect:/admin/viewTelephoneService";
-//    }
+    //call add Client page
+    @GetMapping("/admin/addClient")
+    //@ModelAttribute("client") Client client
+    public String addNewClient(Model model)
+    {
+        Client clientn = new Client();
+        model.addAttribute("client",clientn);
+        return "AddClient";
+    }
+
+    //store new client
+    @PostMapping("/admin/addClient")
+    public String storeClient(@ModelAttribute("client") @Valid Client client, BindingResult bindingResult){
+        //check for unique email
+        emailValidator.validate(client, bindingResult);
+
+        if (bindingResult.hasErrors()){
+            return "AddClient";
+        }
+
+        //create new AccountAbonent and bind it with new Client
+
+        //store in db new client !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 
-//    @Autowired
-//    private UserService userService;
-//
-//    @GetMapping("/admin")
-//    public String userList(Model model) {
-//        model.addAttribute("allUsers", userService.allUsers());
-//        return "admin";
-//    }
-//
-//    @PostMapping("/admin")
-//    public String  deleteUser(@RequestParam(required = true, defaultValue = "" ) Long userId,
-//                              @RequestParam(required = true, defaultValue = "" ) String action,
-//                              Model model) {
-//        if (action.equals("delete")){
-//            userService.deleteUser(userId);
-//        }
-//        return "redirect:/admin";
-//    }
-//
-//    @GetMapping("/admin/gt/{userId}")
-//    //greater 24
-//    public String  gtUser(@PathVariable("userId") Long userId, Model model) {
-//        model.addAttribute("allUsers", userService.usergtList(userId));
-//        return "admin";
-//    }
+        System.out.println(client.getFirstName() + " "+client.getEmail()+" "+client.getPassword());
+        System.out.println("STATUS -"+client.isActive());
+        return "redirect:/admin";
+    }
+
+    //call view ClientService page
+    @GetMapping("/admin/viewClients")
+    public String viewClients(Model model){
+        Client cl1 = new Client();
+        cl1.setId(1L);
+        cl1.setFirstName("first");
+        cl1.setSecondName("first");
+        cl1.setEmail("first");
+        cl1.setActive(true);
+        cl1.setAccountId(5L);
+        Client cl2 = new Client();
+        cl2.setId(2L);
+        cl2.setFirstName("second");
+        cl2.setSecondName("second");
+        cl2.setEmail("second");
+        cl2.setActive(false);
+        cl2.setAccountId(-5L);
+        List<Client> cll = new ArrayList<Client>();
+        cll.add(cl1);
+        cll.add(cl2);
+        model.addAttribute("clients",cll);
+        return "ViewClients";
+    }
+
+
 }
