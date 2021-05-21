@@ -18,9 +18,9 @@ import javax.sql.DataSource;
 import java.util.Properties;
 
 @Configuration
-@EnableJpaRepositories(basePackages = "org.callservice.repository")
+@EnableJpaRepositories(basePackages = "org.callservice.repositories")
 @EnableTransactionManagement
-//@EnableSpringDataWebSupport
+@EnableSpringDataWebSupport
 @PropertySource("classpath:application.properties")
 public class PersistenceConfig {
 
@@ -63,7 +63,8 @@ public class PersistenceConfig {
         final LocalContainerEntityManagerFactoryBean entityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
         entityManagerFactoryBean.setDataSource(dataSource);
         //package with Entity
-        entityManagerFactoryBean.setPackagesToScan(new String[]{"org.callservice.entity"});
+
+        entityManagerFactoryBean.setPackagesToScan(new String[]{"org.callservice.models"});
         //hibernate implementation of JpaVendorAdapter
         entityManagerFactoryBean.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
         //add Hibernate Properties

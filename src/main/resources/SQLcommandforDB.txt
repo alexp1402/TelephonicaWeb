@@ -4,10 +4,13 @@ CREATE DATABASE telephonica
     ENCODING = 'UTF8'
     CONNECTION LIMIT = -1;
 
-    drop table if exists TEST cascade
+  drop table if exists t_services cascade
+  drop sequence if exists hibernate_sequence
 
-    create table TEST (
+    create table t_services (
        id int8 not null,
-        test varchar(255),
+        cost float8 check (cost>=0),
+        description varchar(255),
+        name varchar(255),
         primary key (id)
     )

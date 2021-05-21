@@ -19,7 +19,7 @@
         </tr>
         <tr th:each="service : ${services}">
             <td th:text="${service.name}">NAME</td>
-            <td th:text="${service.description}">DESCRIPTION</td>
+            <td th:text="${service.description.substring(0,9)}">DESCRIPTION</td>
             <td th:text="${service.cost}">COST</td>
             <td>
                 <a th:href="@{editService/{id}(id=${service.getId()})}" th:text="#{button.edit}">Edit</a>

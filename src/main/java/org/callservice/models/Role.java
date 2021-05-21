@@ -1,4 +1,4 @@
-package org.callservice.entity;
+package org.callservice.models;
 
 import org.springframework.security.core.GrantedAuthority;
 
@@ -16,7 +16,7 @@ public class Role implements GrantedAuthority {
     private String name;
     //        @Transient
 //        @ManyToMany(mappedBy = "roles")
-    private Set<User> users;
+//    private Set<User> users;
 
     public Role() {
     }
@@ -46,13 +46,13 @@ public class Role implements GrantedAuthority {
         this.name = name;
     }
 
-    public Set<User> getUsers() {
-        return users;
-    }
+//    public Set<User> getUsers() {
+//        return users;
+//    }
 
-    public void setUsers(Set<User> users) {
-        this.users = users;
-    }
+//    public void setUsers(Set<User> users) {
+//        this.users = users;
+//    }
 
     @Override
     public String getAuthority() {
