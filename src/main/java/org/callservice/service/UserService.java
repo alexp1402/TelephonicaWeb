@@ -2,7 +2,7 @@ package org.callservice.service;
 
 
 import org.springframework.stereotype.Service;
-
+///////////////////////////////////////DEPRECATED////////////////////////////
 @Service
 //implements UserDetailsService
 public class UserService  {

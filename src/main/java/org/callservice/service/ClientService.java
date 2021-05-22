@@ -30,8 +30,8 @@ public class ClientService {
     @Transactional
     public void update(Long id, Client client) {
         Client existClient = clientRepo.getById(id);
-        if (existClient==null)
-            throw new IllegalArgumentException("No such client in db clientId"+id);
+        if (existClient == null)
+            throw new IllegalArgumentException("No such client in db clientId" + id);
 
         client.setAccount(existClient.getAccount());
         client.setRole(existClient.getRole());
@@ -53,8 +53,14 @@ public class ClientService {
 
     public Boolean emailInUse(String email){
         if(clientRepo.findByEmail(email)==null){
-           return true;
+           return false;
         }
-        return false;
+        return true;
+    }
+
+    public Object getCheckedServiceList(Long id){
+        //List<>
+        return null;
+
     }
 }

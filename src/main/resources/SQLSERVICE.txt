@@ -1,0 +1,12 @@
+insert into services (id, cost, description, name) values
+        (1,'3.55','input and out put dialing','Basic call service');
+insert into services (id, cost, description, name) values
+        (2,'0.55','incoming call number identifier','CLIP');
+insert into services (id, cost, description, name) values
+        (3,'0.55','blocking call number identifier','unCLIP');
+insert into services (id, cost, description, name) values
+        (4,'1.55','add answer phone','Answermachine');
+insert into services (id, cost, description, name) values
+        (5,'0.15','redirect incomin call to number ....','Redirect');
+insert into services (id, cost, description, name) values
+        (6,'0.15','all incoming call get busy signal','Do not disturb');

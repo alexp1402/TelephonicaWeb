@@ -8,6 +8,7 @@ import org.callservice.repositories.AccountRepo;
 import org.callservice.repositories.ClientRepo;
 import org.callservice.repositories.TelephoneServiceRepo;
 import org.callservice.service.ClientService;
+import org.callservice.service.TelephoneServiceService;
 import org.callservice.utils.EmailValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -23,13 +24,13 @@ import java.util.*;
 public class AdminController {
 
     private ClientService clientService;
-    private TelephoneServiceRepo telephoneServiceRepo;
+    private TelephoneServiceService telephoneServiceService;
     private EmailValidator emailValidator;
 
     @Autowired
-    public AdminController(ClientService clientService, TelephoneServiceRepo telephoneServiceRepo, EmailValidator emailValidator) {
+    public AdminController(ClientService clientService, TelephoneServiceService telephoneServiceService, EmailValidator emailValidator) {
         this.clientService = clientService;
-        this.telephoneServiceRepo = telephoneServiceRepo;
+        this.telephoneServiceService = telephoneServiceService;
         this.emailValidator = emailValidator;
     }
 
@@ -51,21 +52,21 @@ public class AdminController {
         if(bindingResult.hasErrors()){
             return "AddService";
         }
-        telephoneServiceRepo.save(tService);
+        telephoneServiceService.save(tService);
         return "redirect:/admin";
     }
 
     //call view TelephoneService page
     @GetMapping("/admin/viewTelephoneService")
     public String viewTelephoneService(Model model){
-        model.addAttribute("services", telephoneServiceRepo.findAll());
+        model.addAttribute("services", telephoneServiceService.findAll());
         return "ViewService";
     }
 
     //call edit service page with service object
     @GetMapping("admin/editService/{id}")
     public String editService(@PathVariable("id")Long id, Model model){
-        model.addAttribute("service", telephoneServiceRepo.findById(id).get());
+        model.addAttribute("service", telephoneServiceService.findById(id));
         return "EditService";
     }
 
@@ -74,7 +75,7 @@ public class AdminController {
     public String patchService(@PathVariable("id")Long id, @ModelAttribute("service") TelephoneService service, BindingResult bindingResult){
         if(bindingResult.hasErrors())
             return "EditService";
-        telephoneServiceRepo.save(service);
+        telephoneServiceService.update(service);
         return "redirect:/admin/viewTelephoneService";
     }
 
