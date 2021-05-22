@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<title th:text="#{client.payment}">Payload</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<body>
+
+<div class="w3-container">
+    <div class="w3-card-4">
+        <div class="w3-container w3-yellow">
+            <h2 th:text="#{client.payment}">Payload</h2>
+        </div>
+
+<!--        <div class="w3-panel w3-card-4 w3-yellow">-->
+<!--            <p th:text="${client.firstName}">first name</p>-->
+<!--            <p th:text="${client.secondName}">second name</p>-->
+<!--            <p th:text="#{client.account}"></p>-->
+<!--            <h4 th:text="${client.account.amount}">account</h4>-->
+<!--        </div>-->
+        <br>
+        <form th:action="@{/client/makePayment}"
+              class="w3-container"
+              method="POST"
+              th:object="${payment}"
+        >
+
+            <p class="w3-row w3-section">
+                <input class="w3-input" type="text" id="payment" th:field="*{amount}">
+                <label for="payment" th:text="#{client.payment.amount}">Payment amount</label>
+            <div style="color:red" th:if="${#fields.hasErrors('amount')}" th:text="#{client.payment.error}">
+                Payment Error
+            </div>
+            </p>
+
+            <button class="w3-button w3-round-xlarge w3-yellow" type="submit" th:text="#{button.pay}">Pay</button>
+        </form>
+    </div>
+</div>
+</body>
+</html>

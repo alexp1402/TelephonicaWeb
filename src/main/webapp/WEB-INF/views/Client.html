@@ -15,18 +15,19 @@
 
         <p th:text="${client.firstName}">first name</p>
         <p th:text="${client.secondName}">second name</p>
-        <p th:text="#{client.account}"> <h2 th:text="${client.account.amount}">account</h2></p>
-        <p th:text="#{client.status}">
+        <p th:text="#{client.account}"></p>
+        <h4 th:text="${client.account.amount}">account</h4>
+        <p th:text="#{client.status}"></p>
         <div style="color:blue" th:if="${client.active}" th:text="#{client.status.active}"></div>
         <div style="color:red" th:unless="${client.active}" th:text="#{client.status.blocked}"></div>
-        </p>
+
 
     </div>
 
     <br>
 
     <div class="w3-panel w3-border w3-round-xxlarge"><p>
-        <a th:href="@{client/payload}" th:text="#{client.payment}">Payment</a>
+        <a th:href="@{client/payment}" th:text="#{client.payment}">Payment</a>
     </p></div>
 
     <div class="w3-panel w3-border w3-round-xxlarge"><p>
