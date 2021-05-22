@@ -13,7 +13,7 @@ import javax.validation.constraints.Size;
 
 
 @Entity
-@Table(name = "t_services")
+@Table(name = "services")
 public class TelephoneService {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

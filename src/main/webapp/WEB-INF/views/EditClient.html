@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<title th:text="#{client.edit.title}">Add new telephone service</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<body>
+
+<div class="w3-container">
+    <div class="w3-card-4">
+        <div class="w3-container w3-green">
+            <h2 th:text="#{client.edit.title}">Client</h2>
+        </div>
+
+        <form th:action="@{/admin/editClient/{id}(id=${client.getId()})}"
+              class="w3-container"
+              th:method="PATCH"
+              th:object="${client}">
+
+            <p class="w3-row w3-section">
+                <input class="w3-input" type="text" id="firstName" th:field="*{firstName}">
+                <label for="firstName" th:text="#{client.firstName}">Client first name</label>
+                <div style="color:red" th:if="${#fields.hasErrors('firstName')}" th:text="#{client.firstName}">First Name Error
+                </div>
+            </p>
+
+            <p class="w3-row w3-section">
+                <input class="w3-input" type="text" id="secondName" th:field="*{secondName}">
+                <label for="secondName" th:text="#{client.secondName}">Client second name</label>
+                <div style="color:red" th:if="${#fields.hasErrors('secondName')}" th:text="#{client.secondName}">Second Name Error
+                </div>
+            </p>
+
+            <p class="w3-row w3-section">
+                <input class="w3-input" type="text" id="email" th:field="*{email}">
+                <label for="email" th:text="#{client.email}">Client email</label>
+                <div style="color:red" th:if="${#fields.hasErrors('email')}" th:text="#{client.email.error}">Email Error
+                </div>
+            </p>
+
+            <p class="w3-row w3-section">
+                <input class="w3-input" type="text" id="password" th:field="*{password}">
+                <label for="password" th:text="#{client.password}">Client password</label>
+                <div style="color:red" th:if="${#fields.hasErrors('password')}" th:text="#{client.password}">Password Error
+                </div>
+            </p>
+
+            <p class="w3-row w3-section">
+                <input type="checkbox" id="active" th:field="*{active}"/>
+                <label for="active" th:text="#{client.status}"></label>
+            </p>
+
+            <!--            //may be services for client-->
+
+            <button class="w3-button w3-round-xlarge w3-green" type="submit" th:text="#{button.save}">Save</button>
+        </form>
+    </div>
+</div>
+</body>
+</html>

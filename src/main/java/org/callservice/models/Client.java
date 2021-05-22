@@ -1,6 +1,6 @@
 package org.callservice.models;
 
-//3 basic filed "First name Last name Patronymic"
+//3 basic field "First name Last name Patronymic"
 //1 email equal login
 //1 password - set by admin
 
@@ -11,47 +11,62 @@ package org.callservice.models;
 //1 Role (authorization&authentication) - ROLE_USER
 
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.util.Set;
 
-
+@Entity
+@Table(name = "clients")
 public class Client {
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name="id")
     private Long id;
+
+    @Column(name = "first_name")
     @NotEmpty()
     @Size(min = 2, max = 30)
     private String firstName;
+
+    @Column(name = "second_name")
     @NotEmpty()
     @Size(min = 2, max = 30)
     private String secondName;
 
-
+    @Column(name = "email")
     @NotEmpty()
     @Email
     private String email;
+
+    @Column(name = "password")
     @NotEmpty()
     @Size(min = 3)
     private String password;
 
-
+    @Column(name = "active")
     private boolean active;
 
-    private Set<Long> serviceId;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "account_id", referencedColumnName = "id")
+    private Account account;
 
-    private Long accountId;
 
-    public String getRole() {
-        return role;
-    }
+//   private Set<Long> serviceId;
 
-    public void setRole(String role) {
-        this.role = role;
-    }
 
-    private String role="USER";
+//    public String getRole() {
+//        return role;
+//    }
+//
+//    public void setRole(String role) {
+//        this.role = role;
+//    }
+
+//    private String role="USER";
 
 
     public boolean isActive() {
@@ -97,22 +112,6 @@ public class Client {
         this.password = password;
     }
 
-    public Set<Long> getServiceId() {
-        return serviceId;
-    }
-
-    public void setServiceId(Set<Long> serviceId) {
-        this.serviceId = serviceId;
-    }
-
-    public Long getAccountId() {
-        return accountId;
-    }
-
-    public void setAccountId(Long accountId) {
-        this.accountId = accountId;
-    }
-
     public String getSecondName() {
         return secondName;
     }
@@ -121,4 +120,11 @@ public class Client {
         this.secondName = secondName;
     }
 
+    public Account getAccount() {
+        return account;
+    }
+
+    public void setAccount(Account account) {
+        this.account = account;
+    }
 }

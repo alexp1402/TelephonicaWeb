@@ -23,10 +23,10 @@
             <td th:text="${client.firstName}">FIRST NAME</td>
             <td th:text="${client.secondName}">SECOND NAME</td>
             <td th:text="${client.email}">EMAIL</td>
-            <td th:text="${client.accountId}">ACCOUNT</td>
-            <td>STATUS
-                <div th:if="${client.active}" th:text="#{client.status.active}">ACTIVE</div>
-                <div th:unless="${client.active}" th:text="#{client.status.blocked}">BLOCKED</div>
+            <td th:text="${client.account.amount}">ACCOUNT</td>
+            <td>
+                <div th:if="${client.active}" th:text="#{client.status.active}"></div>
+                <div th:unless="${client.active}" th:text="#{client.status.blocked}"></div>
             </td>
             <td>
                 <a th:href="@{editClient/{id}(id=${client.getId()})}" th:text="#{button.edit}">Edit</a>
