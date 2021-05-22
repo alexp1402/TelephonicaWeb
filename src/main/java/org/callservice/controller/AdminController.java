@@ -7,6 +7,7 @@ import org.callservice.models.TelephoneService;
 import org.callservice.repositories.AccountRepo;
 import org.callservice.repositories.ClientRepo;
 import org.callservice.repositories.TelephoneServiceRepo;
+import org.callservice.service.ClientService;
 import org.callservice.utils.EmailValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,23 +15,22 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.util.*;
 
 @Controller
 public class AdminController {
 
+    private ClientService clientService;
     private TelephoneServiceRepo telephoneServiceRepo;
-    private ClientRepo clientRepo;
     private EmailValidator emailValidator;
 
     @Autowired
-    public AdminController(TelephoneServiceRepo telephoneService,
-                           EmailValidator emailValidator,
-                           ClientRepo clientRepo) {
-        this.telephoneServiceRepo = telephoneService;
-        this.emailValidator=emailValidator;
-        this.clientRepo = clientRepo;
+    public AdminController(ClientService clientService, TelephoneServiceRepo telephoneServiceRepo, EmailValidator emailValidator) {
+        this.clientService = clientService;
+        this.telephoneServiceRepo = telephoneServiceRepo;
+        this.emailValidator = emailValidator;
     }
 
     //main admin page
@@ -92,62 +92,41 @@ public class AdminController {
     public String storeClient(@ModelAttribute("client") @Valid Client client, BindingResult bindingResult){
         //check for unique email
         emailValidator.validate(client, bindingResult);
-
         if (bindingResult.hasErrors()){
             return "AddClient";
         }
 
-        //create new Account for Abonent and bind it with new Client
-        Account account = new Account(0.0);
-        client.setAccount(account);
         //store Client in db
-        clientRepo.save(client);
+        clientService.save(client);
         return "redirect:/admin";
     }
 
     //call view ClientService page
     @GetMapping("/admin/viewClients")
     public String viewClients(Model model){
-         model.addAttribute("clients",clientRepo.findAll());
+         model.addAttribute("clients",clientService.findAll());
         return "ViewClients";
     }
 
     //call edit client page with client object
     @GetMapping("admin/editClient/{id}")
     public String editClient(@PathVariable("id")Long id, Model model){
-//        Client cl1 = new Client();
-//        cl1.setId(1L);
-//        cl1.setFirstName("first");
-//        cl1.setSecondName("second");
-//        cl1.setEmail("some@some.by");
-//        cl1.setActive(true);
-//        cl1.setPassword("123456");
-//      // cl1.setAccountId(5L);
-
-        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
-        //model.addAttribute("service",telephoneService.findById(id).get());
-        model.addAttribute("client",clientRepo.findById(id).get());
+        model.addAttribute("client",clientService.findById(id));
         return "EditClient";
     }
 
 
     //update existing service in db
     @PatchMapping("/admin/editClient/{id}")
+    @Transactional
     public String patchSClient(@PathVariable("id")Long id, @ModelAttribute("client") Client client, BindingResult bindingResult){
         //check for unique email
         emailValidator.validate(client, bindingResult);
         if(bindingResult.hasErrors())
             return "EditClient";
 
-        Client existClient = clientRepo.getById(id);
-        existClient.setFirstName(client.getFirstName());
-        existClient.setSecondName(client.getSecondName());
-        existClient.setPassword(client.getPassword());
-        existClient.setEmail(client.getEmail());
-        clientRepo.save(existClient);
-        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        clientService.update(id, client);
 
-        System.out.println(client.getFirstName()+" status-"+client.isActive()+" amount->"+client.getAccount().getId()+" amount="+client.getAccount().getAmount());
         return "redirect:/admin/viewClients";
     }
 

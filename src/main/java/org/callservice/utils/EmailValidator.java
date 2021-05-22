@@ -1,6 +1,7 @@
 package org.callservice.utils;
 
 import org.callservice.models.Client;
+import org.callservice.service.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
@@ -10,6 +11,9 @@ import org.springframework.validation.Validator;
 
 @Component
 public class EmailValidator implements Validator {
+
+    @Autowired
+    ClientService clientService;
 
     //private ClientRepo client;
 
@@ -26,11 +30,10 @@ public class EmailValidator implements Validator {
     @Override
     public void validate(Object o, Errors errors) {
         Client client = (Client) o;
-
-//        if (ClientRepo.show(person.getEmail()).isPresent()) {
-//            // поле, код ошибки, сообщение ошибки
-//            errors.rejectValue("email", "", "This email is already in use");
-//        }
-////////        errors.rejectValue("email","","This email is already in use");
+        ;
+        if (clientService.emailInUse(client.getEmail())) {
+            // field | error number | message
+            errors.rejectValue("email", "", "This email is already in use");
+        }
     }
 }

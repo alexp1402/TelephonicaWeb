@@ -10,14 +10,10 @@ package org.callservice.models;
 
 //1 Role (authorization&authentication) - ROLE_USER
 
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
-
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
-import java.util.Set;
 
 @Entity
 @Table(name = "clients")
@@ -55,6 +51,7 @@ public class Client {
     private Account account;
 
 
+    private Role role;
 //   private Set<Long> serviceId;
 
 
@@ -126,5 +123,13 @@ public class Client {
 
     public void setAccount(Account account) {
         this.account = account;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
     }
 }
