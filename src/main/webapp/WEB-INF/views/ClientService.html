@@ -1,30 +1,46 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<title th:text="#{client.service.title}">Service</title>
+<title th:text="#{client.service.title.change}">Service</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <body>
 
-<div class="w3-container" >
+<div class="w3-container">
     <table>
         <div class="w3-container w3-green">
-            <h2 th:text="#{client.service.title}">Service</h2>
+            <h2 th:text="#{client.service.title.change}">Service</h2>
         </div>
         <tr>
             <th th:text="#{service.name}">SERVICE NAME</th>
             <th th:text="#{service.description}">SERVICE DESCRIPTION</th>
             <th th:text="#{service.cost}">SERVICE PRICE</th>
-            <th th:text="#{service.cost}">SERVICE PRICE</th>
-            <th th:text="#{button.edit}">EDIT</th>
+            <th th:text="#{button.buy}">BUY</th>
         </tr>
         <tr th:each="service : ${services}">
-            <td th:text="${service.name}">NAME</td>
-            <td th:text="${service.description.substring(0,9)}">DESCRIPTION</td>
-            <td th:text="${service.cost}">COST</td>
+            <td th:text="${service.tService.name}">NAME</td>
+            <td th:text="${service.tService.description}">DESCRIPTION</td>
+            <td th:text="${service.tService.cost}">COST</td>
             <td>
-            <td>
-                <a th:href="@{editService/{id}(id=${service.getId()})}" th:text="#{button.edit}">Edit</a>
+<!--                form to buy service-->
+
+
+                <div th:unless="${service.bayed}">
+                    <form th:action="@{/client/buyService/{id}(id=${service.tService.getId()})}"
+                          class="w3-container"
+                          th:method="PATCH">
+
+                        <button class="w3-button w3-round-xlarge w3-green" type="submit" th:text="#{button.buy}">Buy</button>
+                    </form>
+                </div>
+<!--                form to disclaim service-->
+                <div th:if="${service.bayed}" style="color:red">
+                    <form th:action="@{/client/disclaimService/{id}(id=${service.tService.getId()})}"
+                          class="w3-container"
+                          th:method="PATCH">
+                        <button class="w3-button w3-round-xlarge w3-red" type="submit" th:text="#{button.disclaim}">disclaim</button>
+                    </form>
+                </div>
             </td>
         </tr>
     </table>

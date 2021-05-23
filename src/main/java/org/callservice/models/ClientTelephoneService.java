@@ -3,19 +3,29 @@ package org.callservice.models;
 //like wrapper for client service page
 public class ClientTelephoneService{
 
-    private TelephoneService service;
-    private boolean active;
+    private Long id;
 
-    public ClientTelephoneService(TelephoneService service, boolean active) {
-        this.service = service;
-        this.active = active;
+    private TelephoneService tService;
+    private boolean bayed;
+
+    public ClientTelephoneService(TelephoneService tService, boolean bayed) {
+        this.tService = tService;
+        this.bayed = bayed;
     }
 
-    public boolean isActive() {
-        return active;
+    public TelephoneService gettService() {
+        return tService;
     }
 
-    public void setActive(boolean active) {
-        this.active = active;
+    public void settService(TelephoneService tService) {
+        this.tService = tService;
+    }
+
+    public boolean isBayed() {
+        return bayed;
+    }
+
+    public void setBayed(boolean bayed) {
+        this.bayed = bayed;
     }
 }

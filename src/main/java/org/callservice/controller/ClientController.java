@@ -7,9 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
@@ -24,6 +22,7 @@ public class ClientController {
     /////////del it
     private Account account;
     private Client client;
+    private List<ClientTelephoneService> clientTS = null;
 
     @Autowired
     public ClientController(ClientService clientService, TelephoneServiceService telephoneServiceService) {
@@ -54,25 +53,10 @@ public class ClientController {
     public String payloadPage(Model model) {
         //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         //payment amount to model
-        Payment payment = new Payment(1L);
+        Payment payment = new Payment();
         //put current client in Model
         model.addAttribute("payment", payment);
-//        model.addAttribute("client", client);
         return "Payment";
-    }
-
-    //view service for client page
-    @GetMapping("client/viewClientService")
-    public String servicePage(Model model) {
-        //call method compare all service with client's service and return ClientTelephoneService
-        List<TelephoneService> all = (List<TelephoneService>) telephoneServiceService.findAll();
-        List<ClientTelephoneService> clserv = new ArrayList<>();
-        for(TelephoneService service : all){
-            clserv.add(new ClientTelephoneService(service,false));
-        }
-        //need new object servicelist
-        model.addAttribute("services", clserv);
-        return "ClientService";
     }
 
     //take payment POST
@@ -82,10 +66,57 @@ public class ClientController {
             return "Payment";
         }
         //convert to BIGDECIMAL and add and then if amount > 0 active->true
-        client.getAccount().setAmount(client.getAccount().getAmount()+payment.getAmount());
+        client.getAccount().setAmount(client.getAccount().getAmount() + payment.getAmount());
         System.out.println(client.getAccount().getAmount());
         return "redirect:/client";
     }
 
+    //view service for client page
+    @GetMapping("/client/viewClientService")
+    public String servicePage(Model model) {
+        //call method compare all service with client's service and return ClientTelephoneService
+        if (clientTS == null) {
+            List<TelephoneService> all = (List<TelephoneService>) telephoneServiceService.findAll();
+            clientTS = new ArrayList<>();
+            for (TelephoneService service : all) {
+                clientTS.add(new ClientTelephoneService(service, false));
+            }
+        }
+        //need new object servicelist
+        model.addAttribute("services", clientTS);
+        return "ClientService";
+    }
+
+
+    //buy service command
+    @PatchMapping("/client/buyService/{id}")
+    public String buyService(@PathVariable("id") Long id) {
+        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        //make status in clientTS - buy (true)
+        //add tService(id) to client serviceList in DB
+        for (ClientTelephoneService ts : clientTS) {
+            if (ts.gettService().getId() == id) {
+                ts.setBayed(true);
+            }
+        }
+        //System.out.println("ID->" + id);
+        return "redirect:/client/viewClientService";
+    }
+
+    //disclaim service page
+    @PatchMapping("/client/disclaimService/{id}")
+    public String disclaimService(@PathVariable("id") Long id) {
+        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        //make status in clientTS - buy (false)
+        //drop tService(id) from client serviceList in DB
+        for (ClientTelephoneService ts : clientTS) {
+            if (ts.gettService().getId() == id) {
+                ts.setBayed(false);
+            }
+        }
+        System.out.println("ID->" + id);
+        //model.addAttribute("services", clientTS);
+        return "redirect:/client/viewClientService";
+    }
 
 }

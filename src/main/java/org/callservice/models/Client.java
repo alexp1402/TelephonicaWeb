@@ -14,6 +14,9 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "clients")
@@ -52,7 +55,15 @@ public class Client {
 
 
     private Role role;
-//   private Set<Long> serviceId;
+//
+//    @ManyToMany(cascade = Ca)
+//    private Set<TelephoneService> serviceSet=new HashSet<>();
+    //cascade={CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST,CascadeType.REFRESH}
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "bayed_service",
+            joinColumns = @JoinColumn(name = "client_id"),
+            inverseJoinColumns = @JoinColumn(name = "service_id"))
+    private Set<TelephoneService> services;
 
 
 //    public String getRole() {
@@ -131,5 +142,26 @@ public class Client {
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Client client = (Client) o;
+        return email.equals(client.email);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(email);
+    }
+
+    public Set<TelephoneService> getServices() {
+        return services;
+    }
+
+    public void setServices(Set<TelephoneService> services) {
+        this.services = services;
     }
 }

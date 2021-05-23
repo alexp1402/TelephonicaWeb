@@ -1,12 +1,7 @@
 package org.callservice.controller;
 
-
-import org.callservice.models.Account;
 import org.callservice.models.Client;
 import org.callservice.models.TelephoneService;
-import org.callservice.repositories.AccountRepo;
-import org.callservice.repositories.ClientRepo;
-import org.callservice.repositories.TelephoneServiceRepo;
 import org.callservice.service.ClientService;
 import org.callservice.service.TelephoneServiceService;
 import org.callservice.utils.EmailValidator;
@@ -16,9 +11,9 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import javax.transaction.Transactional;
+
 import javax.validation.Valid;
-import java.util.*;
+
 
 @Controller
 public class AdminController {
@@ -119,7 +114,6 @@ public class AdminController {
 
     //update existing service in db
     @PatchMapping("/admin/editClient/{id}")
-    @Transactional
     public String patchSClient(@PathVariable("id")Long id, @ModelAttribute("client") Client client, BindingResult bindingResult){
         //check for unique email
         emailValidator.validate(client, bindingResult);
