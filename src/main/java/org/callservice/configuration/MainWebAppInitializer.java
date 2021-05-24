@@ -34,7 +34,7 @@ public class MainWebAppInitializer extends AbstractAnnotationConfigDispatcherSer
         //add filter to open hidden http method in html PATCH DELETE
         registerHiddenFieldFilter(aServletContext);
         //add filter for Security (authorization and authentification)
-        //configureSpringSecurityFilter(aServletContext);
+        configureSpringSecurityFilter(aServletContext);
     }
 
     private void registerHiddenFieldFilter(ServletContext aContext) {

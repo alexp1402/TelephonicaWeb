@@ -6,6 +6,8 @@ import org.callservice.service.ClientService;
 import org.callservice.service.TelephoneServiceService;
 import org.callservice.utils.EmailValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -18,15 +20,16 @@ import javax.validation.Valid;
 @Controller
 public class AdminController {
 
+
     private ClientService clientService;
     private TelephoneServiceService telephoneServiceService;
     private EmailValidator emailValidator;
 
     @Autowired
-    public AdminController(ClientService clientService, TelephoneServiceService telephoneServiceService, EmailValidator emailValidator) {
-        this.clientService = clientService;
+    public AdminController(ClientService clientService,TelephoneServiceService telephoneServiceService, EmailValidator emailValidator) {
         this.telephoneServiceService = telephoneServiceService;
         this.emailValidator = emailValidator;
+        this.clientService=clientService;
     }
 
     //main admin page

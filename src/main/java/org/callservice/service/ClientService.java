@@ -2,7 +2,6 @@ package org.callservice.service;
 
 import org.callservice.models.Account;
 import org.callservice.models.Client;
-import org.callservice.models.Role;
 import org.callservice.models.TelephoneService;
 import org.callservice.repositories.ClientRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,12 +12,12 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
+
 @Service
-public class ClientService {
+public class ClientService{
 
-
-    ClientRepo clientRepo;
-    TelephoneServiceService telephoneService;
+    private ClientRepo clientRepo;
+    private TelephoneServiceService telephoneService;
 
     @Autowired
     public ClientService(ClientRepo clientRepo,TelephoneServiceService telephoneService) {
@@ -28,7 +27,7 @@ public class ClientService {
 
     public void save(Client client) {
         client.setAccount(new Account(0.0));
-        client.setRole(new Role("ROLE_USER"));
+        //client.setRole(new Role("ROLE_USER"));
         clientRepo.save(client);
     }
 
@@ -79,4 +78,12 @@ public class ClientService {
         //add service to set
         client.getServices().add(tService);
     }
+
+    public Client findByEmail(String email) {
+        return clientRepo.findByEmail(email);
+    }
+
+//    private Set<? extends GrantedAuthority> mapRolesToAuthorities(Set<Role> roles) {
+//        return roles.stream().map(r -> new SimpleGrantedAuthority(r.getName())).collect(Collectors.toList());
+//    }
 }

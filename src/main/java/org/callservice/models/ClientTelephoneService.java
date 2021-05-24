@@ -13,7 +13,7 @@ public class ClientTelephoneService{
         this.bayed = bayed;
     }
 
-    public TelephoneService gettService() {
+    public TelephoneService getService() {
         return tService;
     }
 

@@ -53,29 +53,19 @@ public class Client {
     @JoinColumn(name = "account_id", referencedColumnName = "id")
     private Account account;
 
+    @ManyToMany
+    @JoinTable(name = "clients_roles",
+            joinColumns = @JoinColumn(name = "client_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    private Set<Role> role;
 
-    private Role role;
-//
-//    @ManyToMany(cascade = Ca)
-//    private Set<TelephoneService> serviceSet=new HashSet<>();
     //cascade={CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST,CascadeType.REFRESH}
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "bayed_service",
             joinColumns = @JoinColumn(name = "client_id"),
             inverseJoinColumns = @JoinColumn(name = "service_id"))
     private Set<TelephoneService> services;
-
-
-//    public String getRole() {
-//        return role;
-//    }
-//
-//    public void setRole(String role) {
-//        this.role = role;
-//    }
-
-//    private String role="USER";
-
 
     public boolean isActive() {
         return active;
@@ -136,11 +126,22 @@ public class Client {
         this.account = account;
     }
 
-    public Role getRole() {
+    public Client(@NotEmpty() @Size(min = 2, max = 30) String firstName, @NotEmpty() @Size(min = 2, max = 30) String secondName, @NotEmpty() @Email String email, @NotEmpty() @Size(min = 3) String password, boolean active, Account account, Set<Role> role, Set<TelephoneService> services) {
+        this.firstName = firstName;
+        this.secondName = secondName;
+        this.email = email;
+        this.password = password;
+        this.active = active;
+        this.account = account;
+        this.role = role;
+        this.services = services;
+    }
+
+    public Set<Role> getRole() {
         return role;
     }
 
-    public void setRole(Role role) {
+    public void setRole(Set<Role> role) {
         this.role = role;
     }
 

@@ -9,7 +9,10 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ClientRepo extends JpaRepository<Client,Long> {
 
-    @Query(value = "select clients.id from clients where clients.email = :email", nativeQuery = true)
-    Long findByEmail(@Param("email") String email);
+    Client findByEmail(String email);
+
+//    @Query(value = "select clients.id from clients where clients.email = :email", nativeQuery = true)
+//    Long findByEmail(@Param("email") String email);
+
 
 }

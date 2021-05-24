@@ -95,7 +95,7 @@ public class ClientController {
         //make status in clientTS - buy (true)
         //add tService(id) to client serviceList in DB
         for (ClientTelephoneService ts : clientTS) {
-            if (ts.gettService().getId() == id) {
+            if (ts.getService().getId() == id) {
                 ts.setBayed(true);
             }
         }
@@ -110,7 +110,7 @@ public class ClientController {
         //make status in clientTS - buy (false)
         //drop tService(id) from client serviceList in DB
         for (ClientTelephoneService ts : clientTS) {
-            if (ts.gettService().getId() == id) {
+            if (ts.getService().getId() == id) {
                 ts.setBayed(false);
             }
         }

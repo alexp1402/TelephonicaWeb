@@ -1,68 +1,56 @@
 package org.callservice.service;
 
 
+import org.callservice.models.Client;
+import org.callservice.models.Role;
+import org.callservice.repositories.ClientRepo;
+import org.callservice.repositories.RoleRepo;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-///////////////////////////////////////DEPRECATED////////////////////////////
+
+import javax.transaction.Transactional;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+
 @Service
-//implements UserDetailsService
-public class UserService  {
-//    //        @PersistenceContext
-////        private EntityManager em;
-//    @Autowired
-//    UserRepository userRepository;
-//    @Autowired
-//    RoleRepository roleRepository;
-//    @Autowired
-//    BCryptPasswordEncoder bCryptPasswordEncoder;
-//
-//
-//    @Override
-//    public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
-////        User user = userRepository.findByUsername(username);
-////
-////        if (user == null) {
-////            throw new UsernameNotFoundException("User not found");
-////        }
-////
-////        return user;
-//        return null;
-//    }
-//
-//    public User findUserById(Long userId) {
-////        Optional<User> userFromDb = userRepository.findById(userId);
-////        return userFromDb.orElse(new User());
-//        return null;
-//    }
-//
-//    public List<User> allUsers() {
-////        return userRepository.findAll();
-//        return null;
-//    }
-//
-//    public boolean saveUser(User user) {
-////        User userFromDB = userRepository.findByUsername(user.getUsername());
-//
-////        if (userFromDB != null) {
-////            return false;
-////        }
-//
-////        user.setRoles(Collections.singleton(new Role(1L, "ROLE_USER")));
-////        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-////        userRepository.save(user);
-//        return true;
-//    }
-//
-//    public boolean deleteUser(Long userId) {
-////        if (userRepository.findById(userId).isPresent()) {
-////            userRepository.deleteById(userId);
-////            return true;
-////        }
-//        return false;
-//    }
-//
-//    public List<User> usergtList(Long idMin) {
-////        return em.createQuery("SELECT u FROM User u WHERE u.id > :paramId", User.class)
-////                .setParameter("paramId", idMin).getResultList();
-//        return null;
-//    }
+//implements UserDetailsService to compare exist user in db or not and return UserDetailService for Security
+public class UserService implements UserDetailsService {
+
+    @Autowired
+    private ClientRepo clientRepo;
+    @Autowired
+    private RoleRepo roleRepo;
+
+    @Override
+    @Transactional
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        Client client = clientRepo.findByEmail(email);
+        if (client == null) {
+            throw new UsernameNotFoundException(String.format("o such email '%s' in DB", email));
+        }
+
+        return new org.springframework.security.core.userdetails.User(client.getEmail(), client.getPassword(),
+                client.getRole().stream()
+                        .map(r -> new SimpleGrantedAuthority(r.getName()))
+                        .collect(Collectors.toSet())
+        );
+    }
+
+    public void initRolesAdmin() {
+        Role roleUser = new Role("ROLE_USER");
+        Role roleAdmin = new Role("ROLE_ADMIN");
+        roleRepo.save(roleUser);
+        roleRepo.save(roleAdmin);
+        Set<Role> rSet = new HashSet<>();
+        rSet.add(roleAdmin);
+        Client client = new Client("admin", "admin", "admin@admin",
+                "admin", false, null, rSet, null);
+        clientService.save(client);
+    }
 }

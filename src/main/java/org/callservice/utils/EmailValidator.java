@@ -3,6 +3,7 @@ package org.callservice.utils;
 import org.callservice.models.Client;
 import org.callservice.service.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
@@ -14,13 +15,6 @@ public class EmailValidator implements Validator {
 
     @Autowired
     ClientService clientService;
-
-    //private ClientRepo client;
-
-//    @Autowired
-//    public EmailValidator(Client client) {
-//        this.client = client;
-//    }
 
     @Override
     public boolean supports(Class<?> aClass) {
