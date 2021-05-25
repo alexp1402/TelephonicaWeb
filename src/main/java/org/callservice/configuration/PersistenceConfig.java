@@ -1,5 +1,6 @@
 package org.callservice.configuration;
 
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,9 +28,10 @@ public class PersistenceConfig {
     @Autowired
     private Environment env;
 
-    public PersistenceConfig() {
-        super();
-    }
+//    public PersistenceConfig() {
+//
+//        super();
+//    }
 
     /**
      * Creates the bean DataSource
@@ -63,13 +65,11 @@ public class PersistenceConfig {
         final LocalContainerEntityManagerFactoryBean entityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
         entityManagerFactoryBean.setDataSource(dataSource);
         //package with Entity
-
         entityManagerFactoryBean.setPackagesToScan(new String[]{"org.callservice.models"});
         //hibernate implementation of JpaVendorAdapter
         entityManagerFactoryBean.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
         //add Hibernate Properties
         entityManagerFactoryBean.setJpaProperties(additionalProperties());
-
         return entityManagerFactoryBean;
     }
 
@@ -104,6 +104,9 @@ public class PersistenceConfig {
         //Format sql for console (pretty)
         hibernateProperties.setProperty("hibernate.format_sql", env.getProperty("hibernate.format_sql"));
 
+        hibernateProperties.setProperty("hibernate.useUnicode", env.getProperty("hibernate.useUnicode"));
+        hibernateProperties.setProperty("hibernate.characterEncoding", env.getProperty("hibernate.characterEncoding"));
+        hibernateProperties.setProperty("hibernate.CharSet", env.getProperty("hibernate.CharSet"));
 //
 //        hibernateProperties.setProperty("hibernate.cache.use_second_level_cache", env.getProperty("hibernate.cache.use_second_level_cache"));
 //        hibernateProperties.setProperty("hibernate.cache.use_query_cache", env.getProperty("hibernate.cache.use_query_cache"));

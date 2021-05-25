@@ -1,5 +1,7 @@
 package org.callservice.configuration;
 
+import org.callservice.service.UserInitService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.filter.DelegatingFilterProxy;
 import org.springframework.web.filter.HiddenHttpMethodFilter;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
@@ -35,7 +37,6 @@ public class MainWebAppInitializer extends AbstractAnnotationConfigDispatcherSer
         registerHiddenFieldFilter(aServletContext);
         //add filter for Security (authorization and authentification)
         configureSpringSecurityFilter(aServletContext);
-
     }
 
     private void registerHiddenFieldFilter(ServletContext aContext) {
@@ -47,6 +48,8 @@ public class MainWebAppInitializer extends AbstractAnnotationConfigDispatcherSer
         aContext.addFilter("springSecurityFilterChain", new DelegatingFilterProxy())
             .addMappingForUrlPatterns(null,true,"/*");
     }
+
+
 
 
 }

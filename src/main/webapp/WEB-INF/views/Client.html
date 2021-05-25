@@ -1,8 +1,11 @@
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.springframework.org/security/tags">
+
 <head>
     <!--    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />-->
     <title th:text="#{client.title}">Client page</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 </head>
 <body>
@@ -10,6 +13,23 @@
     <div class="w3-container w3-green">
         <h2 th:text="#{client.title}">Client</h2>
     </div>
+    <br>
+    <div th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}">
+        This will only be displayed if authenticated user has role ROLE_ADMIN.
+    </div>
+    <br>
+    <div th:text="${#authentication.name}">
+        The value of the "name" property of the authentication object should appear here.
+    </div>
+    <br>
+    <div sec:authentication="name">
+        The value of the "name" property of the authentication object should appear here.
+    </div>
+    <br>
+    <div sec:authorize="hasRole('ROLE_ADMIN')">
+        This will only be displayed if authenticated user has role ROLE_ADMIN.
+    </div>
+    <br>
 
     <div class="w3-panel w3-card-4 w3-green">
 

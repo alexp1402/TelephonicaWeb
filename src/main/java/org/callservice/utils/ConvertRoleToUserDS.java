@@ -13,7 +13,6 @@ import javax.transaction.Transactional;
 import java.util.stream.Collectors;
 
 //implements UserDetailsService to compare exist user in db or not and return UserDetailService for Security
-
 @Component
 public class ConvertRoleToUserDS implements UserDetailsService {
 

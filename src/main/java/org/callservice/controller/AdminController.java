@@ -94,7 +94,6 @@ public class AdminController {
         if (bindingResult.hasErrors()){
             return "AddClient";
         }
-
         //store Client in db
         clientService.save(client);
         return "redirect:/admin";
@@ -103,7 +102,7 @@ public class AdminController {
     //call view ClientService page
     @GetMapping("/admin/viewClients")
     public String viewClients(Model model){
-         model.addAttribute("clients",clientService.findAll());
+         model.addAttribute("clients",clientService.findAllClientWithUserRole());
         return "ViewClients";
     }
 
