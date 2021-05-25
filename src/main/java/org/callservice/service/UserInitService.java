@@ -19,38 +19,28 @@ import java.util.stream.Collectors;
 
 
 @Service
-//implements UserDetailsService to compare exist user in db or not and return UserDetailService for Security
-public class UserService implements UserDetailsService {
+public class UserInitService {
 
     @Autowired
-    private ClientRepo clientRepo;
+    private ClientService clientService;
     @Autowired
     private RoleRepo roleRepo;
 
-    @Override
-    @Transactional
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        Client client = clientRepo.findByEmail(email);
-        if (client == null) {
-            throw new UsernameNotFoundException(String.format("o such email '%s' in DB", email));
-        }
-
-        return new org.springframework.security.core.userdetails.User(client.getEmail(), client.getPassword(),
-                client.getRole().stream()
-                        .map(r -> new SimpleGrantedAuthority(r.getName()))
-                        .collect(Collectors.toSet())
-        );
+    public UserInitService() {
     }
 
     public void initRolesAdmin() {
+        //init two roles in db ADMIN and USER
         Role roleUser = new Role("ROLE_USER");
         Role roleAdmin = new Role("ROLE_ADMIN");
         roleRepo.save(roleUser);
         roleRepo.save(roleAdmin);
+        //init admin with login admin@admin and password admin in DB
         Set<Role> rSet = new HashSet<>();
         rSet.add(roleAdmin);
-        Client client = new Client("admin", "admin", "admin@admin",
-                "admin", false, null, rSet, null);
+        Client client = new Client("admin", "admin", "admin@admin.com",
+                "admin",
+                false, null, rSet, null);
         clientService.save(client);
     }
 }

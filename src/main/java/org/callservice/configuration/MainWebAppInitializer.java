@@ -35,6 +35,7 @@ public class MainWebAppInitializer extends AbstractAnnotationConfigDispatcherSer
         registerHiddenFieldFilter(aServletContext);
         //add filter for Security (authorization and authentification)
         configureSpringSecurityFilter(aServletContext);
+
     }
 
     private void registerHiddenFieldFilter(ServletContext aContext) {

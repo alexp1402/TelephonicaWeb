@@ -5,6 +5,7 @@ import org.callservice.models.Client;
 import org.callservice.models.TelephoneService;
 import org.callservice.repositories.ClientRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -16,21 +17,27 @@ import java.util.Set;
 @Service
 public class ClientService{
 
+
+    private PasswordEncoder passwordEncoder;
     private ClientRepo clientRepo;
     private TelephoneServiceService telephoneService;
 
     @Autowired
-    public ClientService(ClientRepo clientRepo,TelephoneServiceService telephoneService) {
+    public ClientService(ClientRepo clientRepo,TelephoneServiceService telephoneService, PasswordEncoder passwordEncoder) {
         this.clientRepo = clientRepo;
         this.telephoneService=telephoneService;
+        this.passwordEncoder=passwordEncoder;
     }
 
+    //save new client for exist client use update
     public void save(Client client) {
         client.setAccount(new Account(0.0));
+        client.setPassword(passwordEncoder.encode(client.getPassword()));
         //client.setRole(new Role("ROLE_USER"));
         clientRepo.save(client);
     }
 
+    //save existing client
     @Transactional
     public void update(Long id, Client client) {
         Client existClient = clientRepo.getById(id);
@@ -43,6 +50,7 @@ public class ClientService{
     }
 
 
+
     public Object findAll() {
         return clientRepo.findAll();
     }
@@ -51,7 +59,6 @@ public class ClientService{
         Optional<Client> client = clientRepo.findById(id);
         if (!client.isPresent())
             throw new IllegalArgumentException("No such client in DB id="+id);
-
         return client.get();
     }
 
@@ -83,7 +90,4 @@ public class ClientService{
         return clientRepo.findByEmail(email);
     }
 
-//    private Set<? extends GrantedAuthority> mapRolesToAuthorities(Set<Role> roles) {
-//        return roles.stream().map(r -> new SimpleGrantedAuthority(r.getName())).collect(Collectors.toList());
-//    }
 }
