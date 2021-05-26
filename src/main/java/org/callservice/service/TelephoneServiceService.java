@@ -28,7 +28,6 @@ public class TelephoneServiceService {
         TelephoneService tService = telephoneServiceRepo.findById(id).get();
         if (tService == null)
             throw new IllegalArgumentException("There is no Telephone Service in Db with id=" + id);
-
         return tService;
     }
 }

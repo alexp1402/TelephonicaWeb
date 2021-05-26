@@ -4,6 +4,7 @@ package org.callservice.service;
 import org.callservice.models.Account;
 import org.callservice.models.Client;
 import org.callservice.models.Role;
+import org.callservice.models.TelephoneService;
 import org.callservice.repositories.ClientRepo;
 import org.callservice.repositories.RoleRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,8 @@ public class UserInitService {
     private ClientService clientService;
     @Autowired
     private RoleRepo roleRepo;
+    @Autowired
+    private TelephoneServiceService telephoneServiceService;
 
     public UserInitService() {
     }
@@ -38,6 +41,7 @@ public class UserInitService {
         Role roleAdmin = new Role("ROLE_ADMIN");
         roleRepo.save(roleUser);
         roleRepo.save(roleAdmin);
+
         //init admin with login admin@admin and password admin in DB
         Set<Role> rSet = new HashSet<>();
         rSet.add(roleAdmin);
@@ -46,12 +50,25 @@ public class UserInitService {
                 false, null, rSet, null);
         clientService.save(client);
 
-//        create user
-
+        //create user
         client = new Client("Alex", "Pleskachev", "leshii85@gmail.com",
-                "12345", true, null, null, null);
-
+                "12345", false, null, null, null);
         clientService.save(client);
+
+        //init basic service
+        TelephoneService telephoneService = new TelephoneService("Basic call service", "input and out put dialing", new BigDecimal(3.55));
+        telephoneServiceService.save(telephoneService);
+        telephoneService = new TelephoneService("CLIP", "incoming call number identifier", new BigDecimal(0.55));
+        telephoneServiceService.save(telephoneService);
+        telephoneService = new TelephoneService("unCLIP", "block call number identifier", new BigDecimal(0.55));
+        telephoneServiceService.save(telephoneService);
+        telephoneService = new TelephoneService("Answer machine", "add auto answer machine", new BigDecimal(1.55));
+        telephoneServiceService.save(telephoneService);
+        telephoneService = new TelephoneService("Redirect", "redirect incomin call to number", new BigDecimal(0.15));
+        telephoneServiceService.save(telephoneService);
+        telephoneService = new TelephoneService("Do not disturb", "all incoming call get busy signal", new BigDecimal(0.15));
+        telephoneServiceService.save(telephoneService);
+
     }
 }
 

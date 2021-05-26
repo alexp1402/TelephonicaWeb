@@ -24,7 +24,7 @@ public class EmailValidator implements Validator {
     public void validate(Object o, Errors errors) {
         Client client = (Client) o;
 
-        if (clientService.emailInUse(client.getEmail())) {
+        if (clientService.emailInUse(client.getId(),client.getEmail())) {
             // field | error number | message
             errors.rejectValue("email", "", "This email is already in use");
         }

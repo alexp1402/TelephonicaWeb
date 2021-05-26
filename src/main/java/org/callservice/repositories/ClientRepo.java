@@ -2,6 +2,7 @@ package org.callservice.repositories;
 
 import org.callservice.models.Client;
 import org.callservice.models.Role;
+import org.callservice.models.TelephoneService;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -22,10 +23,8 @@ public interface ClientRepo extends JpaRepository<Client,Long> {
     //WHERE :role MEMBER OF c.role
     @Query("SELECT c FROM Client c WHERE :arole MEMBER OF c.role")
     List<Client> findWithRole(@Param("arole") Role role);
-    //Client findByRole(HashSet<Role> role);
 
-//@Query(value = "select clients.id from clients where clients.email = :email", nativeQuery = true)
-//    Long findByEmail(@Param("email") String email);
-
+//    @Query("SELECT c.services.id FROM Client c WHERE :arole MEMBER OF c.role")
+//    Long findServiceId(@Param("arole") Role role);
 
 }

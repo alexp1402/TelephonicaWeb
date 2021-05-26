@@ -19,16 +19,7 @@ public class MainpController {
 
     @GetMapping("/init")
     public String initSite(){
-
         uService.initRolesAdmin();
         return "redirect:/";
     }
-//    @Autowired
-//    private RoleRepo roleRepo;
-//
-//    @Autowired
-//    private ClientService clientService;
-//
-
-
 }

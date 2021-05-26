@@ -4,6 +4,7 @@ import org.callservice.models.Account;
 import org.callservice.models.Client;
 import org.callservice.models.Role;
 import org.callservice.models.TelephoneService;
+import org.callservice.models.form.ClientTelephoneServices;
 import org.callservice.repositories.ClientRepo;
 import org.callservice.repositories.RoleRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,10 +13,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -50,13 +48,8 @@ public class ClientService{
 
     //save existing client
     @Transactional
-    public void update(Long id, Client client) {
-        Client existClient = clientRepo.getById(id);
-        if (existClient == null)
-            throw new IllegalArgumentException("No such client in db clientId to update" + id);
-        client.setAccount(existClient.getAccount());
-        client.setRole(existClient.getRole());
-        //? what with Count??????????????
+    //Long id,
+    public void update( Client client) {
         clientRepo.save(client);
     }
 
@@ -71,11 +64,33 @@ public class ClientService{
         return client.get();
     }
 
-    public Boolean emailInUse(String email){
-        if(clientRepo.findByEmail(email)==null){
+    public Boolean emailInUse(Long client_id, String email){
+        Client find = clientRepo.findByEmail(email);
+        //if no such email or found Clinet.id equals client_id (patch client data)
+        if(find == null || find.getId().equals(client_id)){
            return false;
         }
         return true;
+    }
+
+    //return List of all services marked which are bayed by client and which not
+    @Transactional
+    public List<ClientTelephoneServices> getClientMarkedServices(Client client){
+        List<ClientTelephoneServices> markedServices = new ArrayList<>();
+        ((List<TelephoneService>) telephoneService.findAll())
+                .stream()
+                .forEach(ts->markedServices.add(
+                        //hasService(client, ts))
+                        new ClientTelephoneServices(ts, true)));
+        return markedServices;
+    }
+
+    @Transactional
+    private boolean hasService(Client client, TelephoneService ts) {
+        //return true if client.services has service ts
+        return client.getServices()
+                .stream()
+                .anyMatch(bayedService->bayedService.equals(ts));
     }
 
     public void addService(Long serviceId, Long clientId){

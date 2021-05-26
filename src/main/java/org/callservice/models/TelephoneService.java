@@ -5,6 +5,8 @@ import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
+import java.math.BigDecimal;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
@@ -33,12 +35,18 @@ public class TelephoneService {
 
     @Column(name = "cost")
     @Min(value = 0)
-    private Double cost;
+    private BigDecimal cost;
 
     @ManyToMany(mappedBy = "services")
-    Set<Client> clients;
+    private Set<Client> clients = new HashSet<>();
 
     public TelephoneService() {
+    }
+
+    public TelephoneService(@NotEmpty() @Size(min = 2) String name, @NotEmpty @Size(min = 10) String description, @Min(value = 0) BigDecimal cost) {
+        this.name = name;
+        this.description = description;
+        this.cost = cost;
     }
 
     public void setId(Long id) {
@@ -65,11 +73,11 @@ public class TelephoneService {
         this.description = description;
     }
 
-    public Double getCost() {
+    public BigDecimal getCost() {
         return cost;
     }
 
-    public void setCost(Double cost) {
+    public void setCost(BigDecimal cost) {
         this.cost = cost;
     }
 

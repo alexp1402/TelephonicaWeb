@@ -122,7 +122,7 @@ public class AdminController {
         if(bindingResult.hasErrors())
             return "EditClient";
 
-        clientService.update(id, client);
+        clientService.update(client);
 
         return "redirect:/admin/viewClients";
     }
