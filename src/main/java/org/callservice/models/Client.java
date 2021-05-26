@@ -65,7 +65,7 @@ public class Client {
     @JoinTable(name = "bayed_service",
             joinColumns = @JoinColumn(name = "client_id"),
             inverseJoinColumns = @JoinColumn(name = "service_id"))
-    private Set<TelephoneService> services;
+    private Set<TelephoneService> services = new HashSet<>();
 
     public boolean isActive() {
         return active;

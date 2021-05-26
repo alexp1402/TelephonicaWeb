@@ -11,6 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -36,7 +37,7 @@ public class ClientService{
 
     //save new client. For exist client use update
     public void save(Client client) {
-        client.setAccount(new Account(0.0));
+        client.setAccount(new Account(new BigDecimal(0.0)));
         client.setPassword(passwordEncoder.encode(client.getPassword()));
         //by default all new Client will be USER
         if (client.getRole()==null){

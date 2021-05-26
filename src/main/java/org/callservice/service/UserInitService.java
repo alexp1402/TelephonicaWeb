@@ -1,6 +1,7 @@
 package org.callservice.service;
 
 
+import org.callservice.models.Account;
 import org.callservice.models.Client;
 import org.callservice.models.Role;
 import org.callservice.repositories.ClientRepo;
@@ -13,6 +14,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -29,6 +31,7 @@ public class UserInitService {
     public UserInitService() {
     }
 
+    @Transactional
     public void initRolesAdmin() {
         //init two roles in db ADMIN and USER
         Role roleUser = new Role("ROLE_USER");
@@ -42,5 +45,13 @@ public class UserInitService {
                 "admin",
                 false, null, rSet, null);
         clientService.save(client);
+
+//        create user
+
+        client = new Client("Alex", "Pleskachev", "leshii85@gmail.com",
+                "12345", true, null, null, null);
+
+        clientService.save(client);
     }
 }
+

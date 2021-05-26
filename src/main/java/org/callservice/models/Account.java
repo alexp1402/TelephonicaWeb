@@ -1,6 +1,9 @@
 package org.callservice.models;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name="account")
@@ -11,15 +14,19 @@ public class Account {
     private Long id;
 
     @Column(name = "amount")
-    private double amount;
+    private BigDecimal amount;
 
     @OneToOne(mappedBy = "account")
     private Client client;
 
+    @OneToMany(mappedBy = "account")
+    private Set<Payment> payments = new HashSet<>();
+
+
     public Account() {
     }
 
-    public Account(double amount) {
+    public Account(BigDecimal amount) {
         this.amount = amount;
     }
 
@@ -31,11 +38,28 @@ public class Account {
         this.id = id;
     }
 
-    public double getAmount() {
+    public BigDecimal getAmount() {
         return amount;
     }
 
-    public void setAmount(double amount) {
+    public void setAmount(BigDecimal amount) {
         this.amount = amount;
     }
+
+    public Client getClient() {
+        return client;
+    }
+
+    public void setClient(Client client) {
+        this.client = client;
+    }
+
+    public Set<Payment> getPayments() {
+        return payments;
+    }
+
+    public void setPayments(Set<Payment> payments) {
+        this.payments = payments;
+    }
+
 }

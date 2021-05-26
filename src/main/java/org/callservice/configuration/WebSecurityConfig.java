@@ -24,36 +24,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/user/**").authenticated()
+                .antMatchers("/client/**").authenticated()
                 .antMatchers("/admin/**").hasRole("ADMIN")
                 .and()
                 .formLogin()
                 .and()
-                .logout().logoutSuccessUrl("/");
+                .logout()
+                .logoutSuccessUrl("/");
     }
-
-//  //  In-Memory
-//    @Bean
-//    public UserDetailsService users() {
-////        UserDetails user = User.builder()
-////                .username("user")
-////                .password("{bcrypt}$2y$12$0./a1TvfPwxj.OTlQLF1HONCpHXHtrcrn7CR5sPE7UHSWLbkPjxZG")
-////                .roles("USER")
-////                .build();
-//        UserDetails admin = User.builder()
-//                .username("admin")
-//                .password("{bcrypt}$2y$12$0./a1TvfPwxj.OTlQLF1HONCpHXHtrcrn7CR5sPE7UHSWLbkPjxZG")
-//                .roles("ADMIN")
-//                .build();
-//        return new InMemoryUserDetailsManager(admin);
-//    }
-
-
-//    @Autowired
-//    protected void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-//        auth.userDetailsService(users()).passwordEncoder(passwordEncoder());
-//    }
-
 
     @Bean
     public PasswordEncoder passwordEncoder() {

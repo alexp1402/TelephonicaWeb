@@ -1,13 +1,29 @@
 package org.callservice.models;
 
+import javax.persistence.*;
 import javax.validation.constraints.DecimalMin;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
+@Entity
+@Table(name = "payments")
 public class Payment {
 
-    Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="id")
+    private Long id;
 
+    @Column(name = "amount")
     @DecimalMin(value = "0.0", inclusive = false)
-    double amount;
+    private BigDecimal amount;
+
+    @Column
+    private LocalDateTime localDateTime;
+
+    @ManyToOne
+    @JoinColumn(name="account_id", nullable=false)
+    private Account account;
 
     public Payment() {
     }
@@ -24,11 +40,27 @@ public class Payment {
         this.id = id;
     }
 
-    public double getAmount() {
+    public BigDecimal getAmount() {
         return amount;
     }
 
-    public void setAmount(double amount) {
+    public void setAmount(BigDecimal amount) {
         this.amount = amount;
+    }
+
+    public LocalDateTime getLocalDateTime() {
+        return localDateTime;
+    }
+
+    public void setLocalDateTime(LocalDateTime localDateTime) {
+        this.localDateTime = localDateTime;
+    }
+
+    public Account getAccount() {
+        return account;
+    }
+
+    public void setAccount(Account account) {
+        this.account = account;
     }
 }

@@ -9,7 +9,10 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.transaction.Transactional;
 import javax.validation.Valid;
+import java.math.BigDecimal;
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,42 +35,55 @@ public class ClientController {
 
     //main client page
     @GetMapping("/client")
-    public String clientMenu(Model model) {
-        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        //put current client in model
-        if (client == null) {
-            client = new Client();
-            client.setId(21L);
-            client.setFirstName("Alexp");
-            client.setSecondName("Plesk");
-            account = new Account(2.25);
-            client.setAccount(account);
-            client.setActive(true);
+    public String clientMenu(Model model, Principal principal) {
+        if (principal==null){
+            throw new SecurityException("DANGER Security breach No authentication incoming for client in /client/");
         }
-        model.addAttribute("client", client);
+//        if (client == null) {
+//            client = new Client();
+//            client.setId(21L);
+//            client.setFirstName(principal.getName());
+//            client.setSecondName("Plesk");
+//            account = new Account(2.25);
+//            client.setAccount(account);
+//            client.setActive(true);
+//        }
+//        System.out.println(principal.getName());
+
+        //get full client by client_name in principal (email)
+        model.addAttribute("client", clientService.findByEmail(principal.getName()));
         return "Client";
     }
 
     //view payload page
     @GetMapping("client/payment")
-    public String payloadPage(Model model) {
+    public String payloadPage(Model model, Principal principal) {
         //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        //payment amount to model
+        //take current client and put in model him or her payment
         Payment payment = new Payment();
-        //put current client in Model
         model.addAttribute("payment", payment);
         return "Payment";
     }
 
     //take payment POST
+    @Transactional
     @PostMapping("/client/makePayment")
-    public String takePayment(@ModelAttribute("payment") @Valid Payment payment, BindingResult bindingResult) {
+    public String takePayment(@ModelAttribute("payment") @Valid Payment payment, BindingResult bindingResult, Principal principal) {
         if (bindingResult.hasErrors()) {
             return "Payment";
         }
         //convert to BIGDECIMAL and add and then if amount > 0 active->true
-        client.getAccount().setAmount(client.getAccount().getAmount() + payment.getAmount());
-        System.out.println(client.getAccount().getAmount());
+        //find client by email
+        Client cl = clientService.findByEmail(principal.getName());
+        //calculate new client.account.amount
+        cl.getAccount().setAmount(cl.getAccount().getAmount().add(payment.getAmount()));
+        //store payment in client.account
+        cl.getAccount().getPayments().add(payment);
+
+        //if amount>0 client status->true
+
+//        //client.getAccount().setAmount(client.getAccount().getAmount() + payment.getAmount());
+//        System.out.println(client.getAccount().getAmount());
         return "redirect:/client";
     }
 
