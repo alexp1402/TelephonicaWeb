@@ -64,7 +64,7 @@ public class AdminController {
     //call edit service page with service object
     @GetMapping("admin/editService/{id}")
     public String editService(@PathVariable("id")Long id, Model model){
-        model.addAttribute("service", telephoneServiceService.findById(id));
+        model.addAttribute("service", telephoneServiceService.getById(id));
         return "EditService";
     }
 

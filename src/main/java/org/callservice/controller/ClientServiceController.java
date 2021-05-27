@@ -32,45 +32,23 @@ public class ClientServiceController {
     //view service for client page
     @GetMapping("/client/viewClientService")
     public String servicePage(Model model, Principal principal) {
-        //get all services marked bayed or not by client
-        if (clientTelephoneServices.isEmpty()) {
-            clientTelephoneServices = clientService.getClientMarkedServices(clientService.findByEmail(principal.getName()));
-        }
-        //add to Model to show on page
-        model.addAttribute("services", clientTelephoneServices);
-
+        //get all services marked bayed or not by client and add to Model to show on page
+        model.addAttribute("services", clientService.getClientMarkedServices(principal.getName()));
         return "ClientService";
     }
 
 
     //buy service command
     @PatchMapping("/client/buyService/{id}")
-    public String buyService(@PathVariable("id") Long id) {
-        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        //make status in clientTS - buy (true)
-        //add tService(id) to client serviceList in DB
-//        for (ClientTelephoneServices ts : clientTS) {
-//            if (ts.getService().getId() == id) {
-//                ts.setBayed(true);
-//            }
-//        }
-        //System.out.println("ID->" + id);
+    public String buyService(@PathVariable("id") Long id, Principal principal) {
+        clientService.addService(id,principal.getName());
         return "redirect:/client/viewClientService";
     }
 
     //disclaim service page
     @PatchMapping("/client/disclaimService/{id}")
-    public String disclaimService(@PathVariable("id") Long id) {
-        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        //make status in clientTS - buy (false)
-        //drop tService(id) from client serviceList in DB
-//        for (ClientTelephoneServices ts : clientTS) {
-//            if (ts.getService().getId() == id) {
-//                ts.setBayed(false);
-//            }
-//        }
-//        System.out.println("ID->" + id);
-        //model.addAttribute("services", clientTS);
+    public String disclaimService(@PathVariable("id") Long id, Principal principal) {
+        clientService.deleteService(id, principal.getName());
         return "redirect:/client/viewClientService";
     }
 }

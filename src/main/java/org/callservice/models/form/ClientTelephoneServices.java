@@ -8,12 +8,15 @@ public class ClientTelephoneServices {
     private TelephoneService tService;
     private boolean bayed;
 
+    public ClientTelephoneServices() {
+    }
+
     public ClientTelephoneServices(TelephoneService tService, boolean bayed) {
         this.tService = tService;
         this.bayed = bayed;
     }
 
-    public TelephoneService getService() {
+    public TelephoneService gettService() {
         return tService;
     }
 

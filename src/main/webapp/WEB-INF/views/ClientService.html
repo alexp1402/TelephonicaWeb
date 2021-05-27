@@ -17,14 +17,14 @@
             <th th:text="#{service.cost}">SERVICE PRICE</th>
             <th th:text="#{button.buy}">BUY</th>
         </tr>
+
+
         <tr th:each="service : ${services}">
             <td th:text="${service.tService.name}">NAME</td>
             <td th:text="${service.tService.description}">DESCRIPTION</td>
             <td th:text="${service.tService.cost}">COST</td>
             <td>
 <!--                form to buy service-->
-
-
                 <div th:unless="${service.bayed}">
                     <form th:action="@{/client/buyService/{id}(id=${service.tService.getId()})}"
                           class="w3-container"

@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 
 
 @Service
-public class ClientService{
+public class ClientService {
 
     private PasswordEncoder passwordEncoder;
     private ClientRepo clientRepo;
@@ -26,10 +26,10 @@ public class ClientService{
     private RoleRepo roleRepo;
 
     @Autowired
-    public ClientService(ClientRepo clientRepo,TelephoneServiceService telephoneService, PasswordEncoder passwordEncoder, RoleRepo roleRepo) {
+    public ClientService(ClientRepo clientRepo, TelephoneServiceService telephoneService, PasswordEncoder passwordEncoder, RoleRepo roleRepo) {
         this.clientRepo = clientRepo;
-        this.telephoneService=telephoneService;
-        this.passwordEncoder=passwordEncoder;
+        this.telephoneService = telephoneService;
+        this.passwordEncoder = passwordEncoder;
         this.roleRepo = roleRepo;
     }
 
@@ -38,10 +38,13 @@ public class ClientService{
         client.setAccount(new Account(new BigDecimal(0.0)));
         client.setPassword(passwordEncoder.encode(client.getPassword()));
         //by default all new Client will be USER
-        if (client.getRole()==null){
+        if (client.getRole() == null) {
             Set<Role> role = new HashSet<>();
             role.add(roleRepo.getByName("ROLE_USER"));
             client.setRole(role);
+        }
+        if (client.getServices() == null) {
+            client.setServices(new HashSet<>());
         }
         clientRepo.save(client);
     }
@@ -49,7 +52,7 @@ public class ClientService{
     //save existing client
     @Transactional
     //Long id,
-    public void update( Client client) {
+    public void update(Client client) {
         clientRepo.save(client);
     }
 
@@ -60,54 +63,28 @@ public class ClientService{
     public Object findById(Long id) {
         Optional<Client> client = clientRepo.findById(id);
         if (!client.isPresent())
-            throw new IllegalArgumentException("No such client in DB id="+id);
+            throw new IllegalArgumentException("No such client in DB id=" + id);
         return client.get();
     }
 
-    public Boolean emailInUse(Long client_id, String email){
+    public Boolean emailInUse(Long client_id, String email) {
         Client find = clientRepo.findByEmail(email);
         //if no such email or found Clinet.id equals client_id (patch client data)
-        if(find == null || find.getId().equals(client_id)){
-           return false;
+        if (find == null || find.getId().equals(client_id)) {
+            return false;
         }
         return true;
     }
 
     //return List of all services marked which are bayed by client and which not
     @Transactional
-    public List<ClientTelephoneServices> getClientMarkedServices(Client client){
+    public List<ClientTelephoneServices> getClientMarkedServices(String clientEmail) {
+        Set<TelephoneService> clientService = findByEmail(clientEmail).getServices();
         List<ClientTelephoneServices> markedServices = new ArrayList<>();
-        ((List<TelephoneService>) telephoneService.findAll())
-                .stream()
-                .forEach(ts->markedServices.add(
-                        //hasService(client, ts))
-                        new ClientTelephoneServices(ts, true)));
+        ((List<TelephoneService>) telephoneService.findAll()).stream()
+                .forEach(ts -> markedServices.add(
+                        new ClientTelephoneServices(ts, clientService.contains(ts))));
         return markedServices;
-    }
-
-    @Transactional
-    private boolean hasService(Client client, TelephoneService ts) {
-        //return true if client.services has service ts
-        return client.getServices()
-                .stream()
-                .anyMatch(bayedService->bayedService.equals(ts));
-    }
-
-    public void addService(Long serviceId, Long clientId){
-        //find service by id
-        TelephoneService tService = (TelephoneService) telephoneService.findById(serviceId);
-        //find client by id
-        Client client = (Client) findById(clientId);
-
-        Set<TelephoneService> services = client.getServices();
-        if(services==null){
-            //create new service
-            services = new HashSet<>();
-            //set it to client
-            client.setServices(services);
-        }
-        //add service to set
-        client.getServices().add(tService);
     }
 
     public Client findByEmail(String email) {
@@ -120,5 +97,27 @@ public class ClientService{
         Role role = roleRepo.getByName("ROLE_USER");
         List<Client> clients = clientRepo.findWithRole(role);
         return clients;
+    }
+
+    //add new service
+    @Transactional
+    public void addService(Long serviceId, String email) {
+        //find client by email
+        Client client = findByEmail(email);
+        //add service(by id) in clients services set
+        client.getServices().add(telephoneService.getById(serviceId));
+        //store
+        update(client);
+    }
+
+    //delete service
+    @Transactional
+    public void deleteService(Long serviceId, String email) {
+        //find client by email
+        Client client = findByEmail(email);
+        //delete service(by id) from clients services set
+        client.getServices().remove(telephoneService.getById(serviceId));
+        //store
+        update(client);
     }
 }

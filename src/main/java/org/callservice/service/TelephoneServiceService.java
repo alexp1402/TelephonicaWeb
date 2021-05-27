@@ -24,8 +24,8 @@ public class TelephoneServiceService {
         return telephoneServiceRepo.findAll();
     }
 
-    public Object findById(Long id) {
-        TelephoneService tService = telephoneServiceRepo.findById(id).get();
+    public TelephoneService getById(Long id) {
+        TelephoneService tService = telephoneServiceRepo.getById(id);
         if (tService == null)
             throw new IllegalArgumentException("There is no Telephone Service in Db with id=" + id);
         return tService;

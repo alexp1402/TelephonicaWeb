@@ -42,19 +42,6 @@ public class UserInitService {
         roleRepo.save(roleUser);
         roleRepo.save(roleAdmin);
 
-        //init admin with login admin@admin and password admin in DB
-        Set<Role> rSet = new HashSet<>();
-        rSet.add(roleAdmin);
-        Client client = new Client("admin", "admin", "admin@admin.com",
-                "admin",
-                false, null, rSet, null);
-        clientService.save(client);
-
-        //create user
-        client = new Client("Alex", "Pleskachev", "leshii85@gmail.com",
-                "12345", false, null, null, null);
-        clientService.save(client);
-
         //init basic service
         TelephoneService telephoneService = new TelephoneService("Basic call service", "input and out put dialing", new BigDecimal(3.55));
         telephoneServiceService.save(telephoneService);
@@ -68,6 +55,22 @@ public class UserInitService {
         telephoneServiceService.save(telephoneService);
         telephoneService = new TelephoneService("Do not disturb", "all incoming call get busy signal", new BigDecimal(0.15));
         telephoneServiceService.save(telephoneService);
+
+        //init admin with login admin@admin and password admin in DB
+        Set<Role> rSet = new HashSet<>();
+        rSet.add(roleAdmin);
+        Client client = new Client("admin", "admin", "admin@admin.com",
+                "admin",
+                false, null, rSet, null);
+        clientService.save(client);
+
+
+
+        //create user
+        client = new Client("Alex", "Pleskachev", "leshii85@gmail.com",
+                "12345", false, null, null, null);
+        clientService.save(client);
+
 
     }
 }
