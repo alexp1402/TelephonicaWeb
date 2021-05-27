@@ -9,6 +9,9 @@
 <div class="w3-container">
     <table>
         <div class="w3-container w3-green">
+            <div th:if="${!active}" style="color:red">
+                <h2 th:text="#{client.active}">If client blocked</h2>
+            </div>
             <h2 th:text="#{client.service.title.change}">Service</h2>
         </div>
         <tr>
@@ -24,21 +27,25 @@
             <td th:text="${service.tService.description}">DESCRIPTION</td>
             <td th:text="${service.tService.cost}">COST</td>
             <td>
-<!--                form to buy service-->
+                <!--                form to buy service-->
                 <div th:unless="${service.bayed}">
                     <form th:action="@{/client/buyService/{id}(id=${service.tService.getId()})}"
                           class="w3-container"
                           th:method="PATCH">
-
-                        <button class="w3-button w3-round-xlarge w3-green" type="submit" th:text="#{button.buy}">Buy</button>
+<!--                        if client is blocked then button add service disable-->
+                        <button class="w3-button w3-round-xlarge w3-green" th:disabled="${!active}" type="submit"
+                                th:text="#{button.buy}">Buy
+                        </button>
                     </form>
                 </div>
-<!--                form to disclaim service-->
+                <!--                form to disclaim service-->
                 <div th:if="${service.bayed}" style="color:red">
                     <form th:action="@{/client/disclaimService/{id}(id=${service.tService.getId()})}"
                           class="w3-container"
                           th:method="PATCH">
-                        <button class="w3-button w3-round-xlarge w3-red" type="submit" th:text="#{button.disclaim}">disclaim</button>
+                        <button class="w3-button w3-round-xlarge w3-red" type="submit" th:text="#{button.disclaim}">
+                            disclaim
+                        </button>
                     </form>
                 </div>
             </td>

@@ -16,7 +16,6 @@ import java.util.Set;
 public interface ClientRepo extends JpaRepository<Client,Long> {
 
     Client findByEmail(String email);
-
     //join fetch c.role where c.role.name='USER_ROLE'
 //    @Query(value="select * from clients c where c.id in (select cr.client_id from clients_roles cr where cr.role_id in (select r.id from roles r where r.name = :role))",
 //            nativeQuery = true)
@@ -26,5 +25,4 @@ public interface ClientRepo extends JpaRepository<Client,Long> {
 
 //    @Query("SELECT c.services.id FROM Client c WHERE :arole MEMBER OF c.role")
 //    Long findServiceId(@Param("arole") Role role);
-
 }

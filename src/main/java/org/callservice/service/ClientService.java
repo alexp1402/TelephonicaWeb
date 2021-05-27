@@ -35,7 +35,10 @@ public class ClientService {
 
     //save new client. For exist client use update
     public void save(Client client) {
-        client.setAccount(new Account(new BigDecimal(0.0)));
+        //default 0.0 money
+        if (client.getAccount() == null) {
+            client.setAccount(new Account(new BigDecimal(0.0)));
+        }
         client.setPassword(passwordEncoder.encode(client.getPassword()));
         //by default all new Client will be USER
         if (client.getRole() == null) {
@@ -50,7 +53,7 @@ public class ClientService {
     }
 
     //save existing client
-    @Transactional
+    //@Transactional
     //Long id,
     public void update(Client client) {
         clientRepo.save(client);
@@ -60,7 +63,7 @@ public class ClientService {
         return clientRepo.findAll();
     }
 
-    public Object findById(Long id) {
+    public Client findById(Long id) {
         Optional<Client> client = clientRepo.findById(id);
         if (!client.isPresent())
             throw new IllegalArgumentException("No such client in DB id=" + id);
@@ -69,7 +72,7 @@ public class ClientService {
 
     public Boolean emailInUse(Long client_id, String email) {
         Client find = clientRepo.findByEmail(email);
-        //if no such email or found Clinet.id equals client_id (patch client data)
+        //if no such email or found Client.id equals client_id (patch client data)
         if (find == null || find.getId().equals(client_id)) {
             return false;
         }
@@ -118,6 +121,28 @@ public class ClientService {
         //delete service(by id) from clients services set
         client.getServices().remove(telephoneService.getById(serviceId));
         //store
+        update(client);
+    }
+
+
+    public boolean getActive(String email) {
+        return findByEmail(email).isActive();
+    }
+
+    @Transactional
+    public void adminUpdate(Long clientId, Client clientData) {
+        Client currentClient = findById(clientId);
+        currentClient.setFirstName(clientData.getFirstName());
+        currentClient.setSecondName(clientData.getSecondName());
+        currentClient.setEmail(clientData.getEmail());
+        currentClient.setActive(clientData.isActive());
+        update(currentClient);
+    }
+
+    @Transactional
+    public void updatePassword(Long clientId, String password) {
+        Client client = findById(clientId);
+        client.setPassword(passwordEncoder.encode(password));
         update(client);
     }
 }

@@ -7,17 +7,17 @@
 <body>
 
 <div class="w3-container">
-    <table>
+    <table class="w3-table">
         <div class="w3-container w3-green">
             <h2 th:text="#{client.view.title}">View and edit</h2>
         </div>
         <tr>
-            <th th:text="#{client.firstName}">SERVICE NAME </th>
-            <th th:text="#{client.secondName}">SERVICE DESCRIPTION </th>
-            <th th:text="#{client.email}">SERVICE PRICE </th>
-            <th th:text="#{client.count}">ACCOUNT </th>
-            <th th:text="#{client.status}">STATUS </th>
-            <th th:edit="#{client.edit}">EDIT </th>
+            <th th:text="#{client.firstName}">   SERVICE NAME   </th>
+            <th th:text="#{client.secondName}">  SERVICE DESCRIPTION  </th>
+            <th th:text="#{client.email}">    SERVICE PRICE   </th>
+            <th th:text="#{client.count}">    ACCOUNT   </th>
+            <th th:text="#{client.status}">     STATUS    </th>
+            <th th:edit="#{client.edit}">   EDIT   </th>
         </tr>
         <tr th:each="client : ${clients}">
             <td th:text="${client.firstName}">FIRST NAME</td>
@@ -35,12 +35,19 @@
     </table>
     <br>
 
+
+    <div class="w3-panel w3-border w3-round-xxlarge"><p>
+        <a th:href="@{viewClients/bill}" th:text="#{admin.bill}">Bill</a>
+    </p></div>
+
+
     <div class="w3-bar w3-green"><p>
         <a class="w3-bar-item w3-large w3-button" th:href="@{/admin}" th:text="#{admin.title}">Admin page</a>
         <a class="w3-bar-item w3-large w3-button" th:href="@{/}" th:text="#{index.page}">Main page</a>
     </p></div>
 
 </div>
+
 
 </body>
 </html>

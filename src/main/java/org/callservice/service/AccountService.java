@@ -1,5 +1,6 @@
 package org.callservice.service;
 
+import org.callservice.models.Account;
 import org.callservice.models.Client;
 import org.callservice.models.Payment;
 import org.callservice.repositories.AccountRepo;
@@ -29,5 +30,9 @@ public class AccountService {
         }
         //update client's account
         accountRepo.save(client.getAccount());
+    }
+
+    public void update(Account account){
+        accountRepo.save(account);
     }
 }

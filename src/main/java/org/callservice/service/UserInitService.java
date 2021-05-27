@@ -42,8 +42,10 @@ public class UserInitService {
         roleRepo.save(roleUser);
         roleRepo.save(roleAdmin);
 
+        HashSet<TelephoneService> mainService = new HashSet<>();
         //init basic service
         TelephoneService telephoneService = new TelephoneService("Basic call service", "input and out put dialing", new BigDecimal(3.55));
+        mainService.add(telephoneService);
         telephoneServiceService.save(telephoneService);
         telephoneService = new TelephoneService("CLIP", "incoming call number identifier", new BigDecimal(0.55));
         telephoneServiceService.save(telephoneService);
@@ -64,13 +66,19 @@ public class UserInitService {
                 false, null, rSet, null);
         clientService.save(client);
 
-
-
         //create user
         client = new Client("Alex", "Pleskachev", "leshii85@gmail.com",
                 "12345", false, null, null, null);
         clientService.save(client);
 
+
+        //client test pool with active status and first amount = 5.0
+
+        for(int i=1;i<5;i++){
+            client = new Client("Client"+i, "SecondClientName", "client"+i+"@client.com",
+                    "12345", true, new Account(new BigDecimal(5.0)), null, mainService);
+            clientService.save(client);
+        }
 
     }
 }

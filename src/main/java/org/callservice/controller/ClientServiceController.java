@@ -34,9 +34,9 @@ public class ClientServiceController {
     public String servicePage(Model model, Principal principal) {
         //get all services marked bayed or not by client and add to Model to show on page
         model.addAttribute("services", clientService.getClientMarkedServices(principal.getName()));
+        model.addAttribute("active",clientService.getActive(principal.getName()));
         return "ClientService";
     }
-
 
     //buy service command
     @PatchMapping("/client/buyService/{id}")
