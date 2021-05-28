@@ -5,11 +5,17 @@ import org.callservice.repositories.TelephoneServiceRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class TelephoneServiceService {
-    @Autowired
-    TelephoneServiceRepo telephoneServiceRepo;
 
+    private TelephoneServiceRepo telephoneServiceRepo;
+
+    @Autowired
+    public TelephoneServiceService(TelephoneServiceRepo telephoneServiceRepo) {
+        this.telephoneServiceRepo = telephoneServiceRepo;
+    }
 
     public void save(TelephoneService tService) {
         //here can be validation by unique service name
@@ -24,12 +30,14 @@ public class TelephoneServiceService {
         return telephoneServiceRepo.findAll();
     }
 
-    public TelephoneService getById(Long id) {
-        TelephoneService tService = telephoneServiceRepo.getById(id);
-        if (tService == null)
+    public TelephoneService findById(Long id){
+        Optional<TelephoneService> getService = telephoneServiceRepo.findById(id);
+        if(!getService.isPresent())
             throw new IllegalArgumentException("There is no Telephone Service in Db with id=" + id);
-        return tService;
+        return getService.get();
     }
+
+
 
 
 }

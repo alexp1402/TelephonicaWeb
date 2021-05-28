@@ -27,15 +27,21 @@ public class MainpController {
 
 
     // Login form
-    @RequestMapping("/login.html")
+    @RequestMapping("/login")
     public String login() {
-        return "login";
+        return "loginout/login";
     }
 
     // Login form with error
-    @RequestMapping("/login-error.html")
+    @RequestMapping("/login-error")
     public String loginError(Model model) {
         model.addAttribute("loginError", true);
-        return "login";
+        return "loginout/login";
+    }
+
+    //Logout form
+    @RequestMapping("/logout")
+    public String logout(){
+        return "loginout/logout";
     }
 }

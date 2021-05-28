@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8">
+    <title th:text="#{logout.title}">Title</title>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+</head>
+    <body>
+        <div class="w3-modal-content w3-card-4 w3-display-middle" style="max-width:600px">
+            <div class="w3-center">
+                <h2 class = "w3-border" th:text="#{logout.ask}"  >logout ask</h2>
+            </div>
+                <form th:action="@{/logout}" method="post" class="w3-container">
+                    <div class="w3-section">
+                    <button class="w3-button w3-block w3-green w3-section w3-padding" type="submit" th:text="#{logout}">log out</button>
+                    </div>
+                </form>
+        </div>
+    </body>
+</html>

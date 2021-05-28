@@ -17,12 +17,13 @@
             <h2 th:text="#{client.view.title}">View and edit</h2>
         </div>
         <tr>
-            <th th:text="#{client.firstName}">   SERVICE NAME   </th>
-            <th th:text="#{client.secondName}">  SERVICE DESCRIPTION  </th>
-            <th th:text="#{client.email}">    SERVICE PRICE   </th>
-            <th th:text="#{client.count}">    ACCOUNT   </th>
-            <th th:text="#{client.status}">     STATUS    </th>
-            <th th:edit="#{client.edit}">   EDIT   </th>
+            <th th:text="#{client.firstName}">SERVICE NAME   </th>
+            <th th:text="#{client.secondName}">SERVICE DESCRIPTION  </th>
+            <th th:text="#{client.email}">SERVICE PRICE   </th>
+<!--            sorting if press-->
+            <th><a th:href="@{viewClients/sortCount}" th:text="#{client.count}">COUNT</a></th>
+            <th th:text="#{client.status}">STATUS</th>
+            <th th:text="#{client.edit}">EDIT</th>
         </tr>
         <tr th:each="client : ${clients}">
             <td th:text="${client.firstName}">FIRST NAME</td>

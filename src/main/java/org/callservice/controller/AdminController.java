@@ -40,20 +40,20 @@ public class AdminController {
     //main admin page
     @GetMapping("/admin")
     public String adminMenu() {
-        return "Admin";
+        return "admin/Admin";
     }
 
     //call add TelephoneService page
     @GetMapping("/admin/addTelephoneService")
     public String addNewTelephoneService(@ModelAttribute("service") TelephoneService tService) {
-        return "AddService";
+        return "admin/AddService";
     }
 
     //adding (storing) new Telephone Service controller
     @PostMapping("/admin/addTelephoneService")
     public String saveTelephoneService(@ModelAttribute("service") @Valid TelephoneService tService, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return "AddService";
+            return "admin/AddService";
         }
         telephoneServiceService.save(tService);
         return "redirect:/admin";
@@ -63,14 +63,14 @@ public class AdminController {
     @GetMapping("/admin/viewTelephoneService")
     public String viewTelephoneService(Model model) {
         model.addAttribute("services", telephoneServiceService.findAll());
-        return "ViewService";
+        return "admin/ViewService";
     }
 
     //call edit service page with service object
     @GetMapping("admin/editService/{id}")
     public String editService(@PathVariable("id") Long id, Model model) {
-        model.addAttribute("service", telephoneServiceService.getById(id));
-        return "EditService";
+        model.addAttribute("service", telephoneServiceService.findById(id));
+        return "admin/EditService";
     }
 
     //update existing service in db
@@ -87,7 +87,7 @@ public class AdminController {
     public String addNewClient(Model model) {
         Client clientn = new Client();
         model.addAttribute("client", clientn);
-        return "AddClient";
+        return "admin/AddClient";
     }
 
     //store new client
@@ -96,7 +96,7 @@ public class AdminController {
         //check for unique email
         emailValidator.validate(client, bindingResult);
         if (bindingResult.hasErrors()) {
-            return "AddClient";
+            return "admin/AddClient";
         }
         //store Client in db
         clientService.save(client);
@@ -107,14 +107,14 @@ public class AdminController {
     @GetMapping("/admin/viewClients")
     public String viewClients(Model model) {
         model.addAttribute("clients", clientService.findAllClientWithUserRole());
-        return "ViewClients";
+        return "admin/ViewClients";
     }
 
     //call edit client page with client object
     @GetMapping("admin/editClient/{id}")
     public String editClient(@PathVariable("id") Long id, Model model) {
         model.addAttribute("client", clientService.findById(id));
-        return "EditClient";
+        return "admin/EditClient";
     }
 
 
@@ -124,7 +124,7 @@ public class AdminController {
         //check for unique email
         emailValidator.validate(client, bindingResult);
         if (bindingResult.hasErrors())
-            return "EditClient";
+            return "admin/EditClient";
         clientService.adminUpdate(id, client);
         return "redirect:/admin/viewClients";
     }
@@ -134,7 +134,7 @@ public class AdminController {
     public String changePassword(@PathVariable("id") Long id, Model model) {
         model.addAttribute("clientId", id);
         model.addAttribute("pass", "");
-        return "EditPassword";
+        return "admin/EditPassword";
     }
 
     //update password
@@ -150,5 +150,12 @@ public class AdminController {
     public String makeBill() {
         simpleBillService.makeBill();
         return "redirect:/admin/viewClients";
+    }
+
+    //sort clients page by client.account.amount
+    @GetMapping("/admin/viewClients/sortCount")
+    public String orderedClientsByAccount(Model model){
+        model.addAttribute("clients", clientService.findAllClientsOrderedByCount());
+        return "forward:admin/ViewClients";
     }
 }
