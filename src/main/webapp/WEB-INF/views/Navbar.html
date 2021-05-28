@@ -1,36 +1,39 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<title th:text="#{title}">Payload</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.springframework.org/security/tags">
+<head>
+    <title th:text="#{title}">Payload</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
 <body>
 <div th:fragment="HeadNav">
     <nav class="w3-bar w3-light-grey">
-
-<!--        <div style="align:right">-->
-<!--            <a th:href="@{'?locale=ru'}">рус</a>-->
-<!--            <a th:href="@{'?locale=en'}">англ</a>-->
-<!--        </div>-->
-
-
-        <div>
+        <!--            locale-->
             <a th:href="@{'?locale=ru'}" class="w3-bar-item w3-button" th:text="#{language.ru}">ru</a>
             <a th:href="@{'?locale=en'}" class="w3-bar-item w3-button w3-border-right" th:text="#{language.en}">en</a>
 
-<!--            main page-->
+        <!--            main page-->
             <a th:href="@{/}" class="w3-bar-item w3-button w3-hover-none w3-border-white w3-bottombar w3-hover-border-green" th:text="#{main}">main</a>
-<!--            client-->
+        <!--            client-->
             <a th:href="@{/client}" class="w3-bar-item w3-button w3-hover-none w3-border-white w3-bottombar w3-hover-border-green" th:text="#{client.title}">client</a>
-<!--            admin-->
+        <!-- show only for ADMIN-->
+        <div sec:authorize="hasRole('ROLE_ADMIN')">
             <a th:href="@{/admin}" class="w3-bar-item w3-button w3-hover-none w3-border-white w3-bottombar w3-hover-border-green" th:text="#{admin.title}">admin</a>
-<!--            init-->
+        </div>
+        <!--            init-->
             <a th:href="@{/init}" class="w3-bar-item w3-button w3-hover-none w3-border-white w3-bottombar w3-hover-border-green" th:text="#{init}">init</a>
 
 
-<!--            login-->
+        <!--show only has no authentication-->
+        <div sec:authorize="!isAuthenticated()">
             <a th:href="@{/login}" class="w3-bar-item w3-button w3-right" th:text="#{login}">log</a>
+        </div>
+        <!--show only has authentication-->
+        <div sec:authorize="isAuthenticated()">
             <a th:href="@{/logout}" class="w3-bar-item w3-button w3-right" th:text="#{logout}">log</a>
+        </div>
 
 <!--            <div class="w3-dropdown-click">-->
 <!--                <button class="w3-button" onclick="myFunction()">-->

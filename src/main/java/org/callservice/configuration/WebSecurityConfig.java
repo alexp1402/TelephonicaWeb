@@ -29,6 +29,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/admin/**").hasRole("ADMIN")
                 .and()
                 .formLogin()
+                .loginPage("/login.html")
+                .failureUrl("/login-error.html")
                 .and()
                 .logout()
                 .logoutSuccessUrl("/");

@@ -1,63 +1,62 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<title th:text="#{client.service.title.change}">Service</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.springframework.org/security/tags">
+<head>
+    <title th:text="#{client.service.title.change}">Service</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">-->
+</head>
+
 <body>
+    <div th:replace="~{Navbar::HeadNav}"></div>
 
-<div class="w3-container">
-    <table>
-        <div class="w3-container w3-green">
-            <div th:if="${!active}" style="color:red">
-                <h2 th:text="#{client.active}">If client blocked</h2>
+    <div class="w3-container">
+        <table>
+            <div class="w3-container w3-green">
+                <div th:if="${!active}" style="color:red">
+                    <h2 th:text="#{client.active}">If client blocked</h2>
+                </div>
+                <h2 th:text="#{client.service.title.change}">Service</h2>
             </div>
-            <h2 th:text="#{client.service.title.change}">Service</h2>
-        </div>
-        <tr>
-            <th th:text="#{service.name}">SERVICE NAME</th>
-            <th th:text="#{service.description}">SERVICE DESCRIPTION</th>
-            <th th:text="#{service.cost}">SERVICE PRICE</th>
-            <th th:text="#{button.buy}">BUY</th>
-        </tr>
+            <tr>
+                <th th:text="#{service.name}">SERVICE NAME</th>
+                <th th:text="#{service.description}">SERVICE DESCRIPTION</th>
+                <th th:text="#{service.cost}">SERVICE PRICE</th>
+                <th th:text="#{button.buy}">BUY</th>
+            </tr>
 
 
-        <tr th:each="service : ${services}">
-            <td th:text="${service.tService.name}">NAME</td>
-            <td th:text="${service.tService.description}">DESCRIPTION</td>
-            <td th:text="${service.tService.cost}">COST</td>
-            <td>
-                <!--                form to buy service-->
-                <div th:unless="${service.bayed}">
-                    <form th:action="@{/client/buyService/{id}(id=${service.tService.getId()})}"
-                          class="w3-container"
-                          th:method="PATCH">
-<!--                        if client is blocked then button add service disable-->
-                        <button class="w3-button w3-round-xlarge w3-green" th:disabled="${!active}" type="submit"
-                                th:text="#{button.buy}">Buy
-                        </button>
-                    </form>
-                </div>
-                <!--                form to disclaim service-->
-                <div th:if="${service.bayed}" style="color:red">
-                    <form th:action="@{/client/disclaimService/{id}(id=${service.tService.getId()})}"
-                          class="w3-container"
-                          th:method="PATCH">
-                        <button class="w3-button w3-round-xlarge w3-red" type="submit" th:text="#{button.disclaim}">
-                            disclaim
-                        </button>
-                    </form>
-                </div>
-            </td>
-        </tr>
-    </table>
-    <br>
-
-    <div class="w3-bar w3-green"><p>
-        <a class="w3-bar-item w3-large w3-button" th:href="@{/client}" th:text="#{client.title}">Client page</a>
-        <a class="w3-bar-item w3-large w3-button" th:href="@{/}" th:text="#{index.page}">Main page</a>
-    </p></div>
-
-</div>
+            <tr th:each="service : ${services}">
+                <td th:text="${service.tService.name}">NAME</td>
+                <td th:text="${service.tService.description}">DESCRIPTION</td>
+                <td th:text="${service.tService.cost}">COST</td>
+                <td>
+                    <!--                form to buy service-->
+                    <div th:unless="${service.bayed}">
+                        <form th:action="@{/client/buyService/{id}(id=${service.tService.getId()})}"
+                              class="w3-container"
+                              th:method="PATCH">
+    <!--                        if client is blocked then button add service disable-->
+                            <button class="w3-button w3-round-xlarge w3-green" th:disabled="${!active}" type="submit"
+                                    th:text="#{button.buy}">Buy
+                            </button>
+                        </form>
+                    </div>
+                    <!--                form to disclaim service-->
+                    <div th:if="${service.bayed}" style="color:red">
+                        <form th:action="@{/client/disclaimService/{id}(id=${service.tService.getId()})}"
+                              class="w3-container"
+                              th:method="PATCH">
+                            <button class="w3-button w3-round-xlarge w3-red" type="submit" th:text="#{button.disclaim}">
+                                disclaim
+                            </button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+        </table>
+        <br>
+    </div>
 </body>
 </html>

@@ -1,94 +1,56 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<title th:text="#{service.add.title}">Add new telephone service</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.springframework.org/security/tags">
+<head>
+    <title th:text="#{service.add.title}">Add new telephone service</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">-->
+</head>
+
 <body>
 
-<div class="w3-container">
-    <div class="w3-card-4">
-        <div class="w3-container w3-green">
-            <h2 th:text="#{service.add.title}">Service</h2>
+    <div th:replace="~{Navbar::HeadNav}"></div>
+
+    <div class="w3-container">
+        <div class="w3-card-4">
+            <div class="w3-container w3-green">
+                <h2 th:text="#{service.add.title}">Service</h2>
+            </div>
+
+            <form th:action="@{/admin/addTelephoneService}"
+                  class="w3-container"
+                  method="POST"
+                  th:object="${service}">
+
+                <p class="w3-row w3-section">
+                    <input class="w3-input" type="text" id="serviceName" th:placeholder="#{service.name.placeholder}"
+                           th:field="*{name}">
+                    <label for="serviceName" th:text="#{service.name}">Telephone service name</label>
+                    <div style="color:red" th:if="${#fields.hasErrors('name')}" th:text="#{service.name.error}">Name Error
+                    </div>
+                </p>
+
+                <p class="w3-row w3-section">
+                    <textarea class="w3-input" id="description" th:placeholder="#{service.description.placeholder}"
+                              th:field="*{description}" cols="80" rows="10" wrap="hard"></textarea>
+                    <label for="description" th:text="#{service.description}">Service description</label>
+                    <div style="color:red" th:if="${#fields.hasErrors('description')}"
+                         th:text="#{service.description.error}">
+                        Description Error
+                    </div>
+                </p>
+
+                <p class="w3-row w3-section">
+                    <input class="w3-input" type="text" id="cost" th:placeholder="#{service.cost.placeholder}" value="0" th:field="*{cost}">
+                    <label for="cost" th:text="#{service.cost}">Cost</label>
+                    <div style="color:red" th:if="${#fields.hasErrors('cost')}" th:text="#{service.cost.error}">Cost Error</div>
+
+                </p>
+
+                <button class="w3-button w3-round-xlarge w3-green" type="submit" th:text="#{button.add}">Add</button>
+            </form>
         </div>
-
-        <form th:action="@{/admin/addTelephoneService}"
-              class="w3-container"
-              method="POST"
-              th:object="${service}">
-
-            <p class="w3-row w3-section">
-                <input class="w3-input" type="text" id="serviceName" th:placeholder="#{service.name.placeholder}"
-                       th:field="*{name}">
-                <label for="serviceName" th:text="#{service.name}">Telephone service name</label>
-                <div style="color:red" th:if="${#fields.hasErrors('name')}" th:text="#{service.name.error}">Name Error
-                </div>
-            </p>
-
-            <p class="w3-row w3-section">
-                <textarea class="w3-input" id="description" th:placeholder="#{service.description.placeholder}"
-                          th:field="*{description}" cols="80" rows="10" wrap="hard"></textarea>
-                <label for="description" th:text="#{service.description}">Service description</label>
-                <div style="color:red" th:if="${#fields.hasErrors('description')}"
-                     th:text="#{service.description.error}">
-                    Description Error
-                </div>
-            </p>
-
-            <p class="w3-row w3-section">
-                <input class="w3-input" type="text" id="cost" th:placeholder="#{service.cost.placeholder}" value="0" th:field="*{cost}">
-                <label for="cost" th:text="#{service.cost}">Cost</label>
-                <div style="color:red" th:if="${#fields.hasErrors('cost')}" th:text="#{service.cost.error}">Cost Error</div>
-
-            </p>
-
-            <button class="w3-button w3-round-xlarge w3-green" type="submit" th:text="#{button.add}">Add</button>
-        </form>
     </div>
-</div>
 </body>
 </html>
-
-<!--
-<form th:action="@{admin/addTelephoneService}" class="w3-container w3-card-4 w3-light-grey w3-text-blue w3-margin" method="POST" th:object="${}">
-    <h2 class="w3-center">Contact Us</h2>
-
-    <div class="w3-row w3-section">
-        <div class="w3-col" style="width:50px"><i class="w3-xxlarge fa fa-user"></i></div>
-        <div class="w3-rest">
-            <input class="w3-input w3-border" name="first" type="text" placeholder="First Name">
-        </div>
-    </div>
-
-    <div class="w3-row w3-section">
-        <div class="w3-col" style="width:50px"><i class="w3-xxlarge fa fa-user"></i></div>
-        <div class="w3-rest">
-            <input class="w3-input w3-border" name="last" type="text" placeholder="Last Name">
-        </div>
-    </div>
-
-    <div class="w3-row w3-section">
-        <div class="w3-col" style="width:50px"><i class="w3-xxlarge fa fa-envelope-o"></i></div>
-        <div class="w3-rest">
-            <input class="w3-input w3-border" name="email" type="text" placeholder="Email">
-        </div>
-    </div>
-
-    <div class="w3-row w3-section">
-        <div class="w3-col" style="width:50px"><i class="w3-xxlarge fa fa-phone"></i></div>
-        <div class="w3-rest">
-            <input class="w3-input w3-border" name="phone" type="text" placeholder="Phone">
-        </div>
-    </div>
-
-    <div class="w3-row w3-section">
-        <div class="w3-col" style="width:50px"><i class="w3-xxlarge fa fa-pencil"></i></div>
-        <div class="w3-rest">
-            <input class="w3-input w3-border" name="message" type="text" placeholder="Message">
-        </div>
-    </div>
-
-    <button class="w3-button w3-block w3-section w3-blue w3-ripple w3-padding">Send</button>
-
-</form>
--->

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.springframework.org/security/tags">
 <head>
     <!--    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />-->
     <title th:text="#{admin.title}">Admin page</title>
@@ -8,32 +9,29 @@
 </head>
 <body>
 
-<div class="w3-container">
-    <div class="w3-container w3-green">
-        <h2 th:text="#{admin.title}">Admin</h2>
+    <div th:replace="~{Navbar::HeadNav}"></div>
+
+    <div class="w3-container">
+        <div class="w3-container w3-green">
+            <h2 th:text="#{admin.title}">Admin</h2>
+        </div>
+
+        <div class="w3-panel w3-border w3-round-xxlarge"><p>
+            <a th:href="@{admin/addTelephoneService}" th:text="#{admin.add.service}">Add service</a>
+        </p></div>
+
+        <div class="w3-panel w3-border w3-round-xxlarge"><p>
+            <a th:href="@{admin/viewTelephoneService}" th:text="#{admin.view.service}">View service</a>
+        </p></div>
+
+        <div class="w3-panel w3-border w3-round-xxlarge"><p>
+            <a th:href="@{admin/addClient}" th:text="#{admin.addUser}">Add user</a>
+        </p></div>
+
+        <div class="w3-panel w3-border w3-round-xxlarge"><p>
+            <a th:href="@{admin/viewClients}" th:text="#{admin.viewUsers}">View Clients</a>
+        </p></div>
     </div>
-
-    <div class="w3-panel w3-border w3-round-xxlarge"><p>
-        <a th:href="@{admin/addTelephoneService}" th:text="#{admin.add.service}">Add service</a>
-    </p></div>
-
-    <div class="w3-panel w3-border w3-round-xxlarge"><p>
-        <a th:href="@{admin/viewTelephoneService}" th:text="#{admin.view.service}">View service</a>
-    </p></div>
-
-    <div class="w3-panel w3-border w3-round-xxlarge"><p>
-        <a th:href="@{admin/addClient}" th:text="#{admin.addUser}">Add user</a>
-    </p></div>
-
-    <div class="w3-panel w3-border w3-round-xxlarge"><p>
-        <a th:href="@{admin/viewClients}" th:text="#{admin.viewUsers}">View Clients</a>
-    </p></div>
-</div>
-
-<div class="w3-bar w3-green"><p>
-    <a class="w3-bar-item w3-large w3-button" th:href="@{/}" th:text="#{index.page}">Main page</a>
-</p>
-</div>
 
 </body>
 </html>

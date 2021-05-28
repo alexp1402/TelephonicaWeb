@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.springframework.org/security/tags">
 <head>
     <!--    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />-->
     <title th:text="#{admin.title}">Admin page</title>
@@ -8,120 +9,61 @@
 </head>
 <body>
 <div th:replace="~{Navbar::HeadNav}"></div>
-<!--<ul class="nav nav-pills flex-column flex-sm-row">-->
-<!--    <li class="nav-item">-->
-<!--        <a class="nav-link active" aria-current="page" href="#">Active</a>-->
-<!--    </li>-->
-<!--    <li class="nav-item dropdown">-->
-<!--        <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Dropdown</a>-->
-<!--        <ul class="dropdown-menu">-->
-<!--            <li><a class="dropdown-item" href="#">Action</a></li>-->
-<!--            <li><a class="dropdown-item" href="#">Another action</a></li>-->
-<!--            <li><a class="dropdown-item" href="#">Something else here</a></li>-->
-<!--            <li><hr class="dropdown-divider"></li>-->
-<!--            <li><a class="dropdown-item" href="#">Separated link</a></li>-->
-<!--        </ul>-->
-<!--    </li>-->
-<!--    <li class="nav-item">-->
-<!--        <a class="nav-link" href="#">Link</a>-->
-<!--    </li>-->
-<!--    <li class="nav-item">-->
-<!--        <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>-->
-<!--    </li>-->
-<!--</ul>-->
-<!-- регист имеет значение!-->
-<!-- включаем заголовок-->
-<!--
-<div th:replace="~{fragments/navbar/HeadBar::HeadNav}"></div>
 
+<div class="w3-container">
+    <div class="w3-container w3-green">
+        <h2 th:text="#{title}">title</h2>
+    </div>
 
-<div class="center-screen">
--->
-<!-- включаем тело-->
-<!--    <div th:replace="~{fragments/form/SendNameFormCss :: sendFormFromCss}"></div>
-</div>
--->
-<!-- Optional JavaScript action="#" -->
-<!-- jQuery first, then Popper.js, then Bootstrap JS -->
-<!--<input type="text" name="userName" value="anonymous" th:value="${user}" />-->
-<div style="align:right">
-    <a th:href="@{'?locale=ru'}">рус</a>
-    <a th:href="@{'?locale=en'}">англ</a>
-</div>
+    <div class="w3-panel w3-border w3-round-xxlarge">
+        <p>
+            <a th:href="@{/client}" th:text="#{client.title}">client</a>
+        </p>
+    </div>
 
-
-<a th:href="">Admin page</a>
-<br>
-<a th:href="">Client page</a>
-<br>
-<a th:href="">Init</a>
-
-
-<br>
-<br>
-<br>
-<br>
-
-<div>
-    <a th:href="@{/login}">Login</a>
+    <div sec:authorize="hasRole('ROLE_ADMIN')">
+        <div class="w3-panel w3-border w3-round-xxlarge">
+            <p>
+                <a th:href="@{/admin}" th:text="#{admin.title}">admin</a>
+            </p>
+        </div>
+    </div>
     <br>
-    <a th:href="@{/logout}">Logout</a>
+
+    <!--    <div th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}">-->
+    <!--        This will only be displayed if authenticated user has role ROLE_ADMIN.-->
+    <!--    </div>-->
+    <!--    <br>-->
+    <!--    <div th:text="${#authentication.name}">-->
+    <!--        The value of the "name" property of the authentication object should appear here.-->
+    <!--    </div>-->
+    <!--    <br>-->
+    <!--    <div sec:authentication="name">-->
+    <!--        The value of the "name" property of the authentication object should appear here.-->
+    <!--    </div>-->
+    <!--    <br>-->
+    <!--    <div sec:authorize="hasRole('ROLE_ADMIN')">-->
+    <!--        This will only be displayed if authenticated user has role ROLE_ADMIN.-->
+    <!--    </div>-->
+    <!--    <br>-->
+
+<!--    login only for non authorized-->
+    <div sec:authorize="!isAuthenticated()">
+        <div class="w3-panel w3-border w3-round-xxlarge">
+            <p>
+                <a th:href="@{/login}" th:text="#{login}">come in</a>
+            </p>
+        </div>
+    </div>
+<!--    logout only for authorized-->
+    <div sec:authorize="isAuthenticated()">
+        <div class="w3-panel w3-border w3-round-xxlarge">
+            <p>
+                <a th:href="@{/logout}" th:text="#{logout}">go out</a>
+            </p>
+        </div>
+    </div>
+
 </div>
-
-<!--
-<p>
-    Today is: <span th:text="${date}">13 May 2011</span>
-</p>
-<p th:text="#{title}">Welcome to our grocery store!</p>
-
-<a th:href="@{/admin}">Admin</a>
-<br>
-<a th:href="@{/user}">User</a>
-
-
-<p>Please select an option</p>
-<ol>
-    <li><a href="product/list.html" th:href="@{/product/list}">Product List</a></li>
-    <li><a href="order/list.html" th:href="@{/order/list}">Order List</a></li>
-    <li><a href="subscribe.html" th:href="@{/subscribe}">Subscribe to our Newsletter</a></li>
-    <li><a href="userprofile.html" th:href="@{/userprofile}">See User Profile</a></li>
-</ol>
-
-<form action="subscribe.html" th:attr="action=@{/subscribe}">
-    <fieldset>
-        <input type="text" name="email" />
-        <input type="submit" value="Subscribe!" th:attr="value=#{subscribe}"/>
-    </fieldset>
-</form>
-
-<input type="checkbox" name="option2" th:checked="${active}" />
-<input type="checkbox" name="option1" checked="checked" />
-
-<table>
-    <tr data-th-each="user : ${users}">
-        <td data-th-text="${user.login}">...</td>
-        <td data-th-text="${user.name}">...</td>
-    </tr>
-</table>
-
-
-<h1>Product list</h1>
-<table>
-    <tr>
-        <th>NAME</th>
-        <th>PRICE</th>
-        <th>IN STOCK</th>
-    </tr>
-    <tr th:each="prod : ${prods}">
-        <td th:text="${prod.name}">Onions</td>
-        <td th:text="${prod.price}">2.41</td>
-        <td th:text="${prod.inStock}? #{true} : #{false}">yes</td>
-    </tr>
-</table>
-<p>
-    <a href="../home.html" th:href="@{/}">Return to home</a>
-</p>
--->
-<script src="/docs/5.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
 </body>
 </html>

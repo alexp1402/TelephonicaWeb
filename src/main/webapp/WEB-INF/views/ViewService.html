@@ -1,10 +1,15 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<title th:text="#{service.add.title}">Add new telephone service</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.springframework.org/security/tags">
+<head>
+    <title th:text="#{service.add.title}">Add new telephone service</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<!--    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">-->
+</head>
 <body>
+
+<div th:replace="~{Navbar::HeadNav}"></div>
 
 <div class="w3-container" >
     <table>
@@ -27,11 +32,6 @@
         </tr>
     </table>
     <br>
-
-    <div class="w3-bar w3-green"><p>
-        <a class="w3-bar-item w3-large w3-button" th:href="@{/admin}" th:text="#{admin.title}">Admin page</a>
-        <a class="w3-bar-item w3-large w3-button" th:href="@{/}" th:text="#{index.page}">Main page</a>
-    </p></div>
 
 </div>
 </body>
