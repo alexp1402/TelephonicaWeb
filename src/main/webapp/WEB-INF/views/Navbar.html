@@ -28,7 +28,7 @@
 
         <!--show only has no authentication-->
         <div sec:authorize="!isAuthenticated()">
-            <a th:href="@{/login}" class="w3-bar-item w3-button w3-right" th:text="#{login}">log</a>
+            <a th:href="@{/login.html}" class="w3-bar-item w3-button w3-right" th:text="#{login}">log</a>
         </div>
         <!--show only has authentication-->
         <div sec:authorize="isAuthenticated()">
