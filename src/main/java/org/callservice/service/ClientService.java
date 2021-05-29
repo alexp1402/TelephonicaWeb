@@ -7,6 +7,9 @@ import org.callservice.models.TelephoneService;
 import org.callservice.models.form.ClientTelephoneServices;
 import org.callservice.repositories.ClientRepo;
 import org.callservice.repositories.RoleRepo;
+import org.callservice.utils.EmailValidator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -21,11 +24,13 @@ import java.util.stream.Collectors;
 @Service
 public class ClientService {
 
+    private static final Logger LOG = LoggerFactory.getLogger(ClientService.class);
+
     private PasswordEncoder passwordEncoder;
     private ClientRepo clientRepo;
     private TelephoneServiceService telephoneService;
     private RoleRepo roleRepo;
-    private boolean sortCount=false;
+    private boolean sortCount = false;
 
     @Autowired
     public ClientService(ClientRepo clientRepo, TelephoneServiceService telephoneService, PasswordEncoder passwordEncoder, RoleRepo roleRepo) {
@@ -55,10 +60,9 @@ public class ClientService {
     }
 
     //save existing client
-    //@Transactional
-    //Long id,
     public void update(Client client) {
         clientRepo.save(client);
+        LOG.info("Update client (id={})", client.getId());
     }
 
     public List<Client> findAll() {
@@ -131,7 +135,6 @@ public class ClientService {
         return findByEmail(email).isActive();
     }
 
-//    @Transactional
     public void adminUpdate(Long clientId, Client clientData) {
         Client currentClient = findById(clientId);
         currentClient.setFirstName(clientData.getFirstName());
@@ -141,16 +144,17 @@ public class ClientService {
         update(currentClient);
     }
 
-//    @Transactional
     public void updatePassword(Long clientId, String password) {
         Client client = findById(clientId);
         client.setPassword(passwordEncoder.encode(password));
         update(client);
     }
 
-    public List<Client> findAllClientsOrderedByCount(){
-        sortCount=sortCount?false:true;
+
+    public List<Client> findAllClientsOrderedByCount() {
+        sortCount = sortCount ? false : true;
+        Role role = roleRepo.getByName("ROLE_USER");
         Sort.Direction direction = sortCount?Sort.Direction.ASC:Sort.Direction.DESC;
-        return clientRepo.findAll(Sort.by(direction, "account.amount"));
+        return clientRepo.findWithRoleOrdered(role,Sort.by(direction,"account.amount"));
     }
 }

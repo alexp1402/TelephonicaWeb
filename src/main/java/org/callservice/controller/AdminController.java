@@ -29,6 +29,8 @@ public class AdminController {
     private EmailValidator emailValidator;
     private SimpleBillService simpleBillService;
 
+    private boolean sortAmount = false;
+
     @Autowired
     public AdminController(ClientService clientService, TelephoneServiceService telephoneServiceService, EmailValidator emailValidator, SimpleBillService simpleBillService) {
         this.telephoneServiceService = telephoneServiceService;
@@ -106,7 +108,13 @@ public class AdminController {
     //call view ClientService page
     @GetMapping("/admin/viewClients")
     public String viewClients(Model model) {
-        model.addAttribute("clients", clientService.findAllClientWithUserRole());
+        if (!sortAmount) {
+            model.addAttribute("clients", clientService.findAllClientWithUserRole());
+        }else{
+            model.addAttribute("clients", clientService.findAllClientsOrderedByCount());
+            sortAmount=false;
+        }
+
         return "admin/ViewClients";
     }
 
@@ -153,9 +161,9 @@ public class AdminController {
     }
 
     //sort clients page by client.account.amount
-    @GetMapping("/admin/viewClients/sortCount")
-    public String orderedClientsByAccount(Model model){
-        model.addAttribute("clients", clientService.findAllClientsOrderedByCount());
-        return "forward:admin/ViewClients";
+    @GetMapping("/admin/viewClients/sortAmount")
+    public String orderedClientsByAccount() {
+        sortAmount = true;
+        return "redirect:/admin/viewClients";
     }
 }
