@@ -27,15 +27,29 @@ public class MainpController {
 
 
     // Login form
-    @RequestMapping("/login.html")
+    @RequestMapping("/login")
     public String login() {
+<<<<<<< HEAD
         return "login.html";
+=======
+        return "loginout/login";
+>>>>>>> 385a5cdca500bb53608f60dd30e3d71907648232
     }
 
     // Login form with error
-    @RequestMapping("/login-error.html")
+    @RequestMapping("/login-error")
     public String loginError(Model model) {
         model.addAttribute("loginError", true);
+<<<<<<< HEAD
         return "login.html";
+=======
+        return "loginout/login";
+    }
+
+    //Logout form
+    @RequestMapping("/logout")
+    public String logout(){
+        return "loginout/logout";
+>>>>>>> 385a5cdca500bb53608f60dd30e3d71907648232
     }
 }

@@ -8,6 +8,7 @@ import org.callservice.models.form.ClientTelephoneServices;
 import org.callservice.repositories.ClientRepo;
 import org.callservice.repositories.RoleRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +25,7 @@ public class ClientService {
     private ClientRepo clientRepo;
     private TelephoneServiceService telephoneService;
     private RoleRepo roleRepo;
+    private boolean sortCount=false;
 
     @Autowired
     public ClientService(ClientRepo clientRepo, TelephoneServiceService telephoneService, PasswordEncoder passwordEncoder, RoleRepo roleRepo) {
@@ -59,7 +61,7 @@ public class ClientService {
         clientRepo.save(client);
     }
 
-    public Object findAll() {
+    public List<Client> findAll() {
         return clientRepo.findAll();
     }
 
@@ -96,7 +98,7 @@ public class ClientService {
 
     //return all client with role User
     @Transactional
-    public Object findAllClientWithUserRole() {
+    public List<Client> findAllClientWithUserRole() {
         Role role = roleRepo.getByName("ROLE_USER");
         List<Client> clients = clientRepo.findWithRole(role);
         return clients;
@@ -108,7 +110,7 @@ public class ClientService {
         //find client by email
         Client client = findByEmail(email);
         //add service(by id) in clients services set
-        client.getServices().add(telephoneService.getById(serviceId));
+        client.getServices().add(telephoneService.findById(serviceId));
         //store
         update(client);
     }
@@ -119,7 +121,7 @@ public class ClientService {
         //find client by email
         Client client = findByEmail(email);
         //delete service(by id) from clients services set
-        client.getServices().remove(telephoneService.getById(serviceId));
+        client.getServices().remove(telephoneService.findById(serviceId));
         //store
         update(client);
     }
@@ -129,7 +131,7 @@ public class ClientService {
         return findByEmail(email).isActive();
     }
 
-    @Transactional
+//    @Transactional
     public void adminUpdate(Long clientId, Client clientData) {
         Client currentClient = findById(clientId);
         currentClient.setFirstName(clientData.getFirstName());
@@ -139,10 +141,16 @@ public class ClientService {
         update(currentClient);
     }
 
-    @Transactional
+//    @Transactional
     public void updatePassword(Long clientId, String password) {
         Client client = findById(clientId);
         client.setPassword(passwordEncoder.encode(password));
         update(client);
+    }
+
+    public List<Client> findAllClientsOrderedByCount(){
+        sortCount=sortCount?false:true;
+        Sort.Direction direction = sortCount?Sort.Direction.ASC:Sort.Direction.DESC;
+        return clientRepo.findAll(Sort.by(direction, "account.amount"));
     }
 }
