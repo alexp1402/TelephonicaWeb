@@ -1,7 +1,7 @@
 package org.callservice.controller;
 
-
 import org.callservice.service.UserInitService;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -9,13 +9,25 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 
+
+
 @Controller
 public class MainpController {
+
+    @Autowired
+    private Logger log;
+
     @Autowired
     private UserInitService uService;
 
     @GetMapping("/")
     public String mainPage(){
+        log.info("INFO");
+        log.error("error");
+        log.debug("debug");
+        log.trace("trace");
+
+
         return "Index";
     }
 
