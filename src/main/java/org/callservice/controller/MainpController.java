@@ -8,7 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-
+import javax.servlet.http.HttpServletRequest;
 
 
 @Controller
@@ -21,7 +21,7 @@ public class MainpController {
     private UserInitService uService;
 
     @GetMapping("/")
-    public String mainPage(){
+    public String mainPage() {
         log.info("INFO");
         log.error("error");
         log.debug("debug");
@@ -32,7 +32,7 @@ public class MainpController {
     }
 
     @GetMapping("/init")
-    public String initSite(){
+    public String initSite() {
         uService.initRolesAdmin();
         return "redirect:/";
     }
@@ -40,9 +40,10 @@ public class MainpController {
 
     // Login form
     @RequestMapping("/login")
-    public String login() {
-    return "loginout/login";
-   }
+    public String login(HttpServletRequest request) {
+        log.trace("login page call from ip {}",request.getRemoteAddr());
+        return "loginout/login";
+    }
 
     // Login form with error
     @RequestMapping("/login-error")
@@ -53,7 +54,7 @@ public class MainpController {
 
     //Logout form
     @RequestMapping("/logout")
-    public String logout(){
+    public String logout() {
         return "loginout/logout";
     }
 }

@@ -13,7 +13,8 @@ import org.springframework.validation.Validator;
 //Validate email for unique
 @Component
 public class EmailValidator implements Validator {
-    private static final Logger LOG = LoggerFactory.getLogger(EmailValidator.class);
+    @Autowired
+    private Logger log;
 
     @Autowired
     ClientService clientService;
@@ -29,8 +30,11 @@ public class EmailValidator implements Validator {
 
         if (clientService.emailInUse(client.getId(),client.getEmail())) {
             // field | error number | message
-            LOG.error("Wrong email for Client(id={}) email ({}) in use", client.getId(), client.getEmail());
+            log.debug("Wrong email for client id={} email {} already in use", client.getId(), client.getEmail());
             errors.rejectValue("email", "", "This email is already in use");
+        }else{
+            log.debug("Email {} got validation for client id={}",client.getEmail(), client.getId());
         }
+
     }
 }

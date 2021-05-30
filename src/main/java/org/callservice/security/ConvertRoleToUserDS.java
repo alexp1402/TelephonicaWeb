@@ -1,4 +1,4 @@
-package org.callservice.utils;
+package org.callservice.security;
 
 import org.callservice.models.Client;
 import org.callservice.repositories.ClientRepo;
