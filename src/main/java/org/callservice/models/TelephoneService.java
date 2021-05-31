@@ -101,4 +101,14 @@ public class TelephoneService {
     public int hashCode() {
         return Objects.hash(id);
     }
+
+    @Override
+    public String toString() {
+        return "TelephoneService{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", cost=" + cost +
+                '}';
+    }
 }

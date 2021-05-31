@@ -22,26 +22,21 @@ public class MainpController {
 
     @GetMapping("/")
     public String mainPage() {
-        log.info("INFO");
-        log.error("error");
-        log.debug("debug");
-        log.trace("trace");
-
-
+        log.debug("Call main page (Index view)");
         return "Index";
     }
 
     @GetMapping("/init")
     public String initSite() {
         uService.initRolesAdmin();
+        log.debug("Init parameter and redirect to main page");
         return "redirect:/";
     }
-
 
     // Login form
     @RequestMapping("/login")
     public String login(HttpServletRequest request) {
-        log.trace("login page call from ip {}",request.getRemoteAddr());
+        log.debug("Call login page for ip {}",request.getRemoteAddr());
         return "loginout/login";
     }
 
@@ -49,12 +44,14 @@ public class MainpController {
     @RequestMapping("/login-error")
     public String loginError(Model model) {
         model.addAttribute("loginError", true);
+        log.error("Error during login Check password and email Redirect to login page");
         return "loginout/login";
     }
 
     //Logout form
     @RequestMapping("/logout")
     public String logout() {
+        log.debug("Call logout page");
         return "loginout/logout";
     }
 }

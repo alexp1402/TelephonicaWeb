@@ -20,18 +20,17 @@ import java.util.Locale;
 
 @Configuration
 @ComponentScan("org.callservice")
-////enable CGLIB proxy
-//@EnableAspectJAutoProxy(proxyTargetClass = true)
 @EnableWebMvc
-//@Import({PersistenceConfig.class})
 public class WebConfig implements WebMvcConfigurer {
 
     private final ApplicationContext applicationContext;
 
+    //get (wired) appContext
     @Autowired
     public WebConfig(ApplicationContext applicationContext) {
         this.applicationContext = applicationContext;
     }
+
 
     @Bean
     public SpringResourceTemplateResolver templateResolver() {
@@ -52,6 +51,7 @@ public class WebConfig implements WebMvcConfigurer {
         return templateEngine;
     }
 
+    //configure Thymeleaf view resolver
     @Override
     public void configureViewResolvers(ViewResolverRegistry registry) {
         ThymeleafViewResolver resolver = new ThymeleafViewResolver();
@@ -60,7 +60,7 @@ public class WebConfig implements WebMvcConfigurer {
         registry.viewResolver(resolver);
     }
 
-
+    //interceptor for locale
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(localeChangeInterceptor());

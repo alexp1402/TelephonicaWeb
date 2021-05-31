@@ -165,4 +165,15 @@ public class Client {
     public void setServices(Set<TelephoneService> services) {
         this.services = services;
     }
+
+    @Override
+    public String toString() {
+        return "Client{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", secondName='" + secondName + '\'' +
+                ", email='" + email + '\'' +
+                ", active=" + active +
+                '}';
+    }
 }

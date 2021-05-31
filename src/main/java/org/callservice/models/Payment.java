@@ -63,4 +63,13 @@ public class Payment {
     public void setAccount(Account account) {
         this.account = account;
     }
+
+    @Override
+    public String toString() {
+        return "Payment{" +
+                "amount=" + amount +
+                ", localDateTime=" + localDateTime +
+                ", account=" + account +
+                '}';
+    }
 }

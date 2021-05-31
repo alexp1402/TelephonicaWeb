@@ -1,6 +1,5 @@
 package org.callservice.configuration;
 
-import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -28,18 +27,7 @@ public class PersistenceConfig {
     @Autowired
     private Environment env;
 
-//    public PersistenceConfig() {
-//
-//        super();
-//    }
-
-    /**
-     * Creates the bean DataSource
-     *
-     * @param env The runtime environment of  our application.
-     * @return
-     */
-
+    //create bean DataSource
     @Bean
     DataSource dataSource(Environment env) {
 
@@ -53,13 +41,7 @@ public class PersistenceConfig {
     }
 
 
-    /**
-     * Creates the bean that creates the JPA entity manager factory.
-     *
-     * @param dataSource The datasource that provides the database connections.
-     * @param env        The runtime environment of  our application.
-     * @return
-     */
+    //create Bean JPAEntityManager
     @Bean
     LocalContainerEntityManagerFactoryBean entityManagerFactory(DataSource dataSource, Environment env) {
         final LocalContainerEntityManagerFactoryBean entityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
@@ -73,13 +55,7 @@ public class PersistenceConfig {
         return entityManagerFactoryBean;
     }
 
-    /**
-     * Creates the transaction manager bean that integrates the used JPA provider with the
-     * Spring transaction mechanism.
-     *
-     * @param emf The used JPA entity manager factory.
-     * @return
-     */
+    //create Transaction manager (integrate usedJPA provider with Spring Transaction)
     @Bean
     JpaTransactionManager transactionManager(final EntityManagerFactory emf) {
         JpaTransactionManager transactionManager = new JpaTransactionManager();
@@ -87,10 +63,7 @@ public class PersistenceConfig {
         return transactionManager;
     }
 
-    /**
-     * Creates the properties for Hibernate from application.properties file in resources folder
-     */
-
+    //properties for hibernate
     final Properties additionalProperties() {
         final Properties hibernateProperties = new Properties();
         //Specifies the action that is invoked to the database when the Hibernate SessionFactory is created or closed.
@@ -108,8 +81,6 @@ public class PersistenceConfig {
         hibernateProperties.setProperty("hibernate.characterEncoding", env.getProperty("hibernate.characterEncoding"));
         hibernateProperties.setProperty("hibernate.CharSet", env.getProperty("hibernate.CharSet"));
 
-
-        // hibernateProperties.setProperty("hibernate.globally_quoted_identifiers", "true");
         return hibernateProperties;
     }
 }

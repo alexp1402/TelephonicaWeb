@@ -5,19 +5,16 @@
     <title th:text="#{service.edit.title}">Add new telephone service</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-<!--    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">-->
 </head>
 <body>
 
-<div th:replace="~{Navbar::HeadNav}"></div>
+<div th:replace="~{fragment/Navbar::HeadNav}"></div>
 
 <div class="w3-container">
     <div class="w3-card-4">
         <div class="w3-container w3-green">
             <h2 th:text="#{service.edit.title}">Service</h2>
         </div>
-
-
 
 
         <form th:action="@{/admin/patchTelephoneService/{id}(id=${service.getId()})}"
@@ -28,24 +25,24 @@
             <p class="w3-row w3-section">
                 <input class="w3-input" type="text" id="serviceName" th:field="*{name}">
                 <label for="serviceName" th:text="#{service.name}">Telephone service name</label>
-                <div style="color:red" th:if="${#fields.hasErrors('name')}" th:text="#{service.name.error}">Name Error
-                </div>
+            <div style="color:red" th:if="${#fields.hasErrors('name')}" th:text="#{service.name.error}">Name Error
+            </div>
             </p>
 
             <p class="w3-row w3-section">
                 <textarea class="w3-input" id="description" th:field="*{description}"
                           rows="10" wrap="hard"></textarea>
                 <label for="description" th:text="#{service.description}">Service description</label>
-                <div style="color:red" th:if="${#fields.hasErrors('description')}"
+            <div style="color:red" th:if="${#fields.hasErrors('description')}"
                  th:text="#{service.description.error}">
                 Description error
-                </div>
+            </div>
             </p>
 
             <p class="w3-row w3-section">
                 <input class="w3-input" type="text" id="cost" th:field="*{cost}">
                 <label for="cost" th:text="#{service.cost}">Cost</label>
-                <div style="color:red" th:if="${#fields.hasErrors('cost')}" th:text="#{service.cost.error}">Cost Error</div>
+            <div style="color:red" th:if="${#fields.hasErrors('cost')}" th:text="#{service.cost.error}">Cost Error</div>
             </p>
 
             <button class="w3-button w3-round-xlarge w3-green" type="submit" th:text="#{button.save}">Save</button>

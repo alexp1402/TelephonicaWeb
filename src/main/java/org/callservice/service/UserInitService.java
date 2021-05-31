@@ -7,6 +7,7 @@ import org.callservice.models.Role;
 import org.callservice.models.TelephoneService;
 import org.callservice.repositories.ClientRepo;
 import org.callservice.repositories.RoleRepo;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -30,6 +31,8 @@ public class UserInitService {
     private RoleRepo roleRepo;
     @Autowired
     private TelephoneServiceService telephoneServiceService;
+    @Autowired
+    private Logger log;
 
     public UserInitService() {
     }
@@ -41,6 +44,7 @@ public class UserInitService {
         Role roleAdmin = new Role("ROLE_ADMIN");
         roleRepo.save(roleUser);
         roleRepo.save(roleAdmin);
+        log.debug("Create two role in db ({} , {})",roleUser,roleAdmin);
 
         HashSet<TelephoneService> mainService = new HashSet<>();
         //init basic service
@@ -57,6 +61,7 @@ public class UserInitService {
         telephoneServiceService.save(telephoneService);
         telephoneService = new TelephoneService("Do not disturb", "all incoming call get busy signal", new BigDecimal(0.15));
         telephoneServiceService.save(telephoneService);
+        log.debug("Create new 6 services in db");
 
         //init admin with login admin@admin and password admin in DB
         Set<Role> rSet = new HashSet<>();
@@ -65,11 +70,13 @@ public class UserInitService {
                 "admin",
                 false, null, rSet, null);
         clientService.save(client);
+        log.debug("Admin created");
 
         //create user
         client = new Client("Alex", "Pleskachev", "leshii85@gmail.com",
                 "12345", false, null, null, null);
         clientService.save(client);
+        log.debug("Client Alex created");
 
 
         //client test pool with active status and first amount = 5.0
@@ -78,6 +85,7 @@ public class UserInitService {
             client = new Client("Client"+i, "SecondClientName", "client"+i+"@client.com",
                     "12345", true, new Account(new BigDecimal(5.0)), null, mainService);
             clientService.save(client);
+            log.debug("Create test client {}",client);
         }
 
     }

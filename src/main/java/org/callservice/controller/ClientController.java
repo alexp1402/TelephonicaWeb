@@ -5,6 +5,7 @@ import org.callservice.models.form.ClientTelephoneServices;
 import org.callservice.service.AccountService;
 import org.callservice.service.ClientService;
 import org.callservice.service.TelephoneServiceService;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,29 +20,30 @@ public class ClientController {
     private ClientService clientService;
     private TelephoneServiceService telephoneServiceService;
     private AccountService accountService;
+    private Logger log;
 
-    /////////del it
-    private Account account;
-    private Client client;
-    private List<ClientTelephoneServices> clientTS = null;
+//    /////////del it
+//    private Account account;
+//    private Client client;
+//    private List<ClientTelephoneServices> clientTS = null;
 
     @Autowired
     public ClientController(ClientService clientService,
                             TelephoneServiceService telephoneServiceService,
-                            AccountService accountService) {
+                            AccountService accountService,
+                            Logger log) {
         this.clientService = clientService;
         this.telephoneServiceService = telephoneServiceService;
         this.accountService = accountService;
+        this.log = log;
     }
 
     //main client page
     @GetMapping("/client")
     public String clientMenu(Model model, Principal principal) {
-        if (principal==null){
-            throw new SecurityException("DANGER Security breach No authentication incoming for client in /client/");
-        }
         //get full client by client_name in principal (email)
         model.addAttribute("client", clientService.findByEmail(principal.getName()));
-        return "Client";
+        log.debug("Call client page for client {}",principal.getName());
+        return "client/Client";
     }
 }

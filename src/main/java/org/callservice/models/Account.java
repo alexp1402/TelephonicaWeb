@@ -62,4 +62,12 @@ public class Account {
         this.payments = payments;
     }
 
+    @Override
+    public String toString() {
+        return "Account{" +
+                "id=" + id +
+                ", amount=" + amount +
+                ", client=" + client +
+                '}';
+    }
 }

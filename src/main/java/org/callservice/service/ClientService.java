@@ -24,19 +24,23 @@ import java.util.stream.Collectors;
 @Service
 public class ClientService {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ClientService.class);
-
     private PasswordEncoder passwordEncoder;
     private ClientRepo clientRepo;
     private TelephoneServiceService telephoneService;
     private RoleRepo roleRepo;
+    private Logger log;
     private boolean sortCount = false;
 
     @Autowired
-    public ClientService(ClientRepo clientRepo, TelephoneServiceService telephoneService, PasswordEncoder passwordEncoder, RoleRepo roleRepo) {
+    public ClientService(ClientRepo clientRepo,
+                         TelephoneServiceService telephoneService,
+                         PasswordEncoder passwordEncoder,
+                         RoleRepo roleRepo,
+                         Logger log) {
         this.clientRepo = clientRepo;
         this.telephoneService = telephoneService;
         this.passwordEncoder = passwordEncoder;
+        this.log = log;
         this.roleRepo = roleRepo;
     }
 
@@ -57,22 +61,27 @@ public class ClientService {
             client.setServices(new HashSet<>());
         }
         clientRepo.save(client);
+        log.debug("Save new client in db client={}", client);
     }
 
     //save existing client
     public void update(Client client) {
         clientRepo.save(client);
-        LOG.info("Update client (id={})", client.getId());
+        log.debug("Update existed client in db with new data={}", client);
     }
 
     public List<Client> findAll() {
+        log.debug("Select all client from db called");
         return clientRepo.findAll();
     }
 
     public Client findById(Long id) {
         Optional<Client> client = clientRepo.findById(id);
-        if (!client.isPresent())
+        if (!client.isPresent()){
+            log.error("No client in db with id={}",id);
             throw new IllegalArgumentException("No such client in DB id=" + id);
+        }
+        log.debug("Find by id client called and return client={}",client.get());
         return client.get();
     }
 
@@ -80,8 +89,10 @@ public class ClientService {
         Client find = clientRepo.findByEmail(email);
         //if no such email or found Client.id equals client_id (patch client data)
         if (find == null || find.getId().equals(client_id)) {
+            log.debug("Email={} is not in use or is in use for current client (id={})", email, client_id);
             return false;
         }
+        log.debug("Email={} is already in use by client_id={} We try to use it for client_id={}", email, find.getId(), client_id);
         return true;
     }
 
@@ -93,11 +104,18 @@ public class ClientService {
         ((List<TelephoneService>) telephoneService.findAll()).stream()
                 .forEach(ts -> markedServices.add(
                         new ClientTelephoneServices(ts, clientService.contains(ts))));
+        log.debug("Get service list marked which are bayed by client and which are not List={}",markedServices);
         return markedServices;
     }
 
     public Client findByEmail(String email) {
-        return clientRepo.findByEmail(email);
+        Client client = clientRepo.findByEmail(email);
+        if (client==null){
+            log.error("No such client in db with email=",email);
+            throw new IllegalArgumentException("No such client in db with email="+email);
+        }
+        log.debug("Find client by email={}", email);
+        return client;
     }
 
     //return all client with role User
@@ -105,6 +123,7 @@ public class ClientService {
     public List<Client> findAllClientWithUserRole() {
         Role role = roleRepo.getByName("ROLE_USER");
         List<Client> clients = clientRepo.findWithRole(role);
+        log.debug("Find all client's in db sorted by role=ROLE_USER Client's={}", clients);
         return clients;
     }
 
@@ -117,6 +136,7 @@ public class ClientService {
         client.getServices().add(telephoneService.findById(serviceId));
         //store
         update(client);
+        log.debug("Store new service_id={} for client={} in db",serviceId,email);
     }
 
     //delete service
@@ -128,11 +148,14 @@ public class ClientService {
         client.getServices().remove(telephoneService.findById(serviceId));
         //store
         update(client);
+        log.debug("Delete and, store change in db, service_id={} from client({}) service list",serviceId,email);
     }
 
 
     public boolean getActive(String email) {
-        return findByEmail(email).isActive();
+        boolean active = findByEmail(email).isActive();
+        log.debug("Check client ({}) for active {} ",email,active);
+        return active;
     }
 
     public void adminUpdate(Long clientId, Client clientData) {
@@ -142,19 +165,22 @@ public class ClientService {
         currentClient.setEmail(clientData.getEmail());
         currentClient.setActive(clientData.isActive());
         update(currentClient);
+        log.debug("Update client(id={}) data ({}) and store it in db",clientData);
     }
 
     public void updatePassword(Long clientId, String password) {
         Client client = findById(clientId);
         client.setPassword(passwordEncoder.encode(password));
         update(client);
+        log.debug("Update client(id={}) password in db",clientId);
     }
 
 
     public List<Client> findAllClientsOrderedByCount() {
         sortCount = sortCount ? false : true;
         Role role = roleRepo.getByName("ROLE_USER");
-        Sort.Direction direction = sortCount?Sort.Direction.ASC:Sort.Direction.DESC;
-        return clientRepo.findWithRoleOrdered(role,Sort.by(direction,"account.amount"));
+        Sort.Direction direction = sortCount ? Sort.Direction.ASC : Sort.Direction.DESC;
+        log.debug("Find all client's sorted by account.amount in direction ascending = {}",direction.isAscending());
+        return clientRepo.findWithRoleOrdered(role, Sort.by(direction, "account.amount"));
     }
 }

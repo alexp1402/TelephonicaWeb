@@ -31,4 +31,12 @@ public class ClientTelephoneServices {
     public void setBayed(boolean bayed) {
         this.bayed = bayed;
     }
+
+    @Override
+    public String toString() {
+        return "ClientTelephoneServices{" +
+                "TelephoneService=" + tService +
+                ", bayed=" + bayed +
+                '}';
+    }
 }

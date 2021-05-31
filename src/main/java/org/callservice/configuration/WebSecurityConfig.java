@@ -28,6 +28,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/client/**").authenticated()
                 .antMatchers("/admin/**").hasRole("ADMIN")
                 .and()
+                .rememberMe().userDetailsService(convertRole)
+                .and()
                 .formLogin()
                 .loginPage("/login")
                 .failureUrl("/login-error")
@@ -36,11 +38,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .logoutSuccessUrl("/");
     }
 
+    //for password coding
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder(10);
     }
 
+    //dao authentication - 'users' log/pass store in DB. Configure tables to userDetailService
     @Bean
     public DaoAuthenticationProvider daoAuthenticationProvider() {
         DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();

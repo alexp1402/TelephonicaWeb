@@ -4,6 +4,7 @@ import org.callservice.models.Account;
 import org.callservice.models.Client;
 import org.callservice.models.Payment;
 import org.callservice.repositories.AccountRepo;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,8 +12,9 @@ import java.time.LocalDateTime;
 
 @Service
 public class AccountService {
-//    @Autowired
-//    ClientService clientService;
+
+    @Autowired
+    Logger log;
 
     @Autowired
     private AccountRepo accountRepo;
@@ -30,6 +32,7 @@ public class AccountService {
         }
         //update client's account
         accountRepo.save(client.getAccount());
+        log.debug("Add and store payment ({}) for client ({})", payment, client);
     }
 
     public void update(Account account){
