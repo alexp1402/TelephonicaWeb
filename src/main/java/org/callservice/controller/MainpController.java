@@ -50,7 +50,7 @@ public class MainpController {
 
     //Logout form
     @RequestMapping("/logout")
-    public String logout() {
+    public String logout(HttpServletRequest request) {
         log.debug("Call logout page");
         return "loginout/logout";
     }

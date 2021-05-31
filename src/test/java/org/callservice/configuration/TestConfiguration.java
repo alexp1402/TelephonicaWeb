@@ -1,5 +1,7 @@
 package org.callservice.configuration;
 
+import org.callservice.repositories.AccountRepo;
+import org.callservice.service.AccountService;
 import org.callservice.service.ClientService;
 import org.callservice.utils.EmailValidator;
 import org.springframework.context.annotation.Bean;
@@ -19,4 +21,11 @@ public class TestConfiguration {
     public ClientService clientService(){
         return mock(ClientService.class);
     }
+
+    @Bean
+    public AccountRepo accountRepo(){ return mock(AccountRepo.class); }
+
+    @Bean
+    public AccountService accountService(){return new AccountService();}
+
 }

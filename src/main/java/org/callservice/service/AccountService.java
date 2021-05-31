@@ -36,6 +36,7 @@ public class AccountService {
     }
 
     public void update(Account account){
+        log.debug("Account ({}) updated current amount is {} ",account.getId(), account.getAmount());
         accountRepo.save(account);
     }
 }
